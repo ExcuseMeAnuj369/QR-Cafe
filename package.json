@@ -1,0 +1,19 @@
+{
+  "name": "qr-dine-owner-ops",
+  "version": "1.0.0",
+  "description": "QR Dine Enterprise Ops — Owner & Manager Command Center",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build:staff": "npm --prefix staff-ops run build",
+    "dev:staff": "npm --prefix staff-ops run dev"
+  },
+  "keywords": [
+    "restaurant-erp",
+    "qrdine",
+    "dashboard"
+  ],
+  "author": "",
+  "license": "ISC"
+}

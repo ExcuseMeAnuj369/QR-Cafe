@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Dine Staff Ops — Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0B0B0F', surface: '#141419', surface2: '#1C1C24',
+            line: '#26262F', ink: '#F5F5F7', muted: '#8B8B96',
+            accent: '#F59E0B', accent2: '#FB923C'
+          },
+          fontFamily: { inter: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0B0B0F; color: #F5F5F7; margin: 0; min-height: 100vh; }
+    .glass { background: rgba(20,20,25,0.85); backdrop-filter: blur(20px); border: 1px solid rgba(38,38,47,0.7); }
+    .card { background: #141419; border: 1px solid #26262F; border-radius: 1rem; transition: transform .2s, box-shadow .2s; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,.25); }
+    .btn-press:active { transform: scale(0.98); }
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: .15; pointer-events: none; z-index: 0; }
+    .tabular { font-variant-numeric: tabular-nums; }
+    @keyframes pulse-red { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)} 50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
+    .pulse-new { animation: pulse-red 2s infinite; }
+  </style>
+</head>
+<body>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,#F59E0B,transparent 70%);top:-100px;left:-100px;"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,#8B5CF6,transparent 70%);bottom:-80px;right:-80px;"></div>
+
+  <!-- ========== LOGIN ========== -->
+  <div id="login-screen" class="min-h-screen flex relative z-10">
+    <div class="hidden lg:flex flex-1 flex-col justify-between p-12">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-lg shadow-amber-500/30 text-lg">🔥</div>
+        <span class="text-xl font-bold tracking-tight">QR DINE <span class="text-accent">OPS</span></span>
+      </div>
+      <div class="max-w-lg">
+        <p class="text-muted text-sm font-medium tracking-widest uppercase mb-4">Restaurant Operations / 01</p>
+        <h1 class="text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight">
+          Keep the floor <span class="text-accent">in rhythm.</span>
+        </h1>
+        <p class="mt-6 text-muted text-lg leading-relaxed max-w-md">
+          One calm workspace for the people who make every table feel effortless.
+        </p>
+      </div>
+      <div class="flex items-center gap-4 text-sm text-muted">
+        <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> All systems operational</span>
+        <span>·</span>
+        <span>Mumbai / Preview</span>
+      </div>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center p-6 lg:p-12">
+      <div class="w-full max-w-md">
+        <p class="text-muted text-xs font-semibold tracking-widest uppercase mb-2">Staff Access</p>
+        <h2 class="text-3xl font-bold tracking-tight">Good to see you.</h2>
+        <p class="text-muted mt-2 text-sm mb-6">Choose your role and enter your staff PIN to continue.</p>
+
+        <div class="grid grid-cols-3 gap-2 mb-5" id="role-btns">
+          <button onclick="selectRole('kitchen')" id="btn-kitchen" class="flex flex-col items-center gap-2 py-4 rounded-xl border border-accent bg-accent/10 text-accent shadow-lg shadow-amber-500/10 btn-press">
+            <span class="text-xl">👨‍🍳</span><span class="text-sm font-semibold">Kitchen</span>
+          </button>
+          <button onclick="selectRole('waiter')" id="btn-waiter" class="flex flex-col items-center gap-2 py-4 rounded-xl border border-line bg-surface2 text-muted hover:border-line btn-press">
+            <span class="text-xl">🍽️</span><span class="text-sm font-semibold">Waiter</span>
+          </button>
+          <button onclick="selectRole('accountant')" id="btn-accountant" class="flex flex-col items-center gap-2 py-4 rounded-xl border border-line bg-surface2 text-muted hover:border-line btn-press">
+            <span class="text-xl">💰</span><span class="text-sm font-semibold">Accountant</span>
+          </button>
+        </div>
+
+        <label class="block text-xs font-semibold text-muted tracking-wider uppercase mb-2">Staff ID</label>
+        <input id="staff-id" type="text" value="1001" class="w-full h-12 px-4 rounded-xl bg-surface2 border border-line text-ink font-medium tabular mb-4 focus:border-accent focus:outline-none" />
+
+        <label class="block text-xs font-semibold text-muted tracking-wider uppercase mb-2">PIN</label>
+        <input id="pin" type="password" value="1001" class="w-full h-12 px-4 rounded-xl bg-surface2 border border-line text-ink font-medium tracking-widest mb-5 focus:border-accent focus:outline-none" />
+
+        <button onclick="doLogin()" class="w-full h-12 rounded-xl bg-accent text-black font-bold text-base flex items-center justify-center gap-2 hover:brightness-110 transition-all btn-press shadow-lg shadow-amber-500/25">
+          Enter workspace →
+        </button>
+
+        <div class="mt-6 flex items-center gap-2 px-4 py-3 rounded-xl bg-surface2/60 border border-line text-xs text-muted">
+          <span>⚡</span>
+          <span>Demo: Staff ID = PIN → <b class="text-ink">1001</b> / <b class="text-ink">2002</b> / <b class="text-ink">3003</b></span>
+        </div>
+        <p class="mt-8 text-center text-xs text-muted">Secure staff workspace · Preview v1.0</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== APP (hidden until login) ========== -->
+  <div id="app-screen" class="hidden min-h-screen relative z-10">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass border-b border-line h-14 flex items-center px-4 gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-sm">🔥</div>
+        <span class="font-bold text-sm tracking-tight hidden sm:block">QR DINE <span class="text-accent">OPS</span></span>
+      </div>
+      <div class="hidden md:flex items-center gap-3 text-xs text-muted">
+        <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Service is live</span>
+        <span>|</span>
+        <span>Sunday, 27 Sep 2026</span>
+        <span>|</span>
+        <span>Shift ends in <span class="text-accent font-semibold tabular">04:12:36</span></span>
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2">
+        <button class="w-10 h-10 rounded-lg flex items-center justify-center text-muted hover:text-ink hover:bg-surface2 relative">
+          🔔<span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-accent text-black text-[10px] font-bold flex items-center justify-center">3</span>
+        </button>
+        <div class="w-px h-6 bg-line mx-1"></div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-bold" id="avatar">AM</div>
+          <div class="hidden sm:block">
+            <p class="text-sm font-semibold leading-tight" id="user-name">Arjun Mehta</p>
+            <p class="text-[11px] text-muted" id="user-role">Kitchen Chef</p>
+          </div>
+          <button onclick="doLogout()" class="w-9 h-9 rounded-lg flex items-center justify-center text-muted hover:text-red-400 hover:bg-red-500/10 ml-1" title="Logout">⎋</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="flex">
+      <!-- Sidebar -->
+      <aside class="w-56 shrink-0 border-r border-line bg-surface/50 flex flex-col h-[calc(100vh-3.5rem)] sticky top-14">
+        <div class="p-4 border-b border-line">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-accent/15 text-accent flex items-center justify-center text-lg" id="role-icon">👨‍🍳</div>
+            <div>
+              <p class="text-sm font-semibold" id="sidebar-role">Kitchen Chef</p>
+              <p class="text-[11px] text-muted flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online</p>
+            </div>
+          </div>
+        </div>
+        <nav class="flex-1 p-2 space-y-0.5 overflow-y-auto" id="sidebar-nav"></nav>
+        <div class="p-3 border-t border-line">
+          <div class="rounded-xl bg-surface2 border border-line p-3">
+            <p class="text-[10px] font-semibold text-muted tracking-wider uppercase mb-1">Today's Shift</p>
+            <p class="text-xs font-medium">10:00 AM — 10:00 PM</p>
+            <div class="mt-2 h-1.5 rounded-full bg-line overflow-hidden"><div class="h-full w-[62%] rounded-full bg-accent"></div></div>
+            <p class="text-[10px] text-muted mt-1">6h 12m elapsed</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex-1 overflow-y-auto h-[calc(100vh-3.5rem)] p-5" id="main-content">
+        <!-- filled by JS -->
+      </main>
+    </div>
+  </div>
+
+  <script>
+    let currentRole = 'kitchen';
+    const creds = { kitchen: {id:'1001',pin:'1001',name:'Arjun Mehta',role:'Kitchen Chef',icon:'👨‍🍳',av:'AM'},
+                    waiter: {id:'2002',pin:'2002',name:'Priya Sharma',role:'Waiter',icon:'🍽️',av:'PS'},
+                    accountant: {id:'3003',pin:'3003',name:'Rahul Verma',role:'Accountant',icon:'💰',av:'RV'} };
+
+    const tabs = {
+      kitchen: [
+        {id:'live-orders', label:'Live Orders', icon:'📋'},
+        {id:'kitchen-stock', label:'Kitchen Stock', icon:'📦'},
+        {id:'live-menu', label:'Live Menu', icon:'📜'},
+        {id:'attendance', label:'My Attendance', icon:'⏱'},
+        {id:'leave', label:'Leave', icon:'🌴'},
+      ],
+      waiter: [
+        {id:'my-tables', label:'My Tables', icon:'🪑'},
+        {id:'available', label:'Available Tables', icon:'📋'},
+        {id:'my-orders', label:'My Orders', icon:'📝'},
+        {id:'requests', label:'Requests', icon:'💬'},
+        {id:'groups', label:'Groups', icon:'🔗'},
+        {id:'attendance', label:'My Attendance', icon:'⏱'},
+        {id:'leave', label:'Leave', icon:'🌴'},
+      ],
+      accountant: [
+        {id:'bills', label:'Bills', icon:'💰'},
+        {id:'verify', label:'Verify Receipt', icon:'🛡️'},
+        {id:'day-close', label:'Day Close', icon:'📊'},
+        {id:'petty-cash', label:'Petty Cash', icon:'💵'},
+        {id:'attendance', label:'My Attendance', icon:'⏱'},
+        {id:'leave', label:'Leave', icon:'🌴'},
+      ]
+    };
+
+    function selectRole(r) {
+      currentRole = r;
+      ['kitchen','waiter','accountant'].forEach(x => {
+        const b = document.getElementById('btn-'+x);
+        if (x===r) { b.className = 'flex flex-col items-center gap-2 py-4 rounded-xl border border-accent bg-accent/10 text-accent shadow-lg shadow-amber-500/10 btn-press'; }
+        else { b.className = 'flex flex-col items-center gap-2 py-4 rounded-xl border border-line bg-surface2 text-muted hover:border-line btn-press'; }
+      });
+      document.getElementById('staff-id').value = creds[r].id;
+      document.getElementById('pin').value = creds[r].pin;
+    }
+
+    function doLogin() {
+      const id = document.getElementById('staff-id').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+      const c = creds[currentRole];
+      if (id === c.id && pin === c.pin) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        document.getElementById('user-name').textContent = c.name;
+        document.getElementById('user-role').textContent = c.role;
+        document.getElementById('sidebar-role').textContent = c.role;
+        document.getElementById('role-icon').textContent = c.icon;
+        document.getElementById('avatar').textContent = c.av;
+        buildSidebar();
+        showTab(tabs[currentRole][0].id);
+      } else {
+        alert('Invalid Staff ID or PIN.\nUse: 1001 / 2002 / 3003');
+      }
+    }
+
+    function doLogout() {
+      document.getElementById('app-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    function buildSidebar() {
+      const nav = document.getElementById('sidebar-nav');
+      nav.innerHTML = tabs[currentRole].map(t => `
+        <button onclick="showTab('${t.id}')" id="tab-${t.id}"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border border-transparent text-muted hover:text-ink hover:bg-surface2">
+          <span>${t.icon}</span> ${t.label}
+        </button>
+      `).join('');
+    }
+
+    function showTab(id) {
+      tabs[currentRole].forEach(t => {
+        const b = document.getElementById('tab-'+t.id);
+        if (!b) return;
+        if (t.id===id) b.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all bg-accent/15 text-accent border border-accent/30';
+        else b.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border border-transparent text-muted hover:text-ink hover:bg-surface2';
+      });
+      const main = document.getElementById('main-content');
+      if (id === 'live-orders') main.innerHTML = liveOrdersHTML();
+      else if (id === 'kitchen-stock') main.innerHTML = stockHTML();
+      else if (id === 'attendance') main.innerHTML = attendanceHTML();
+      else if (id === 'leave') main.innerHTML = leaveHTML();
+      else if (id === 'my-tables') main.innerHTML = myTablesHTML();
+      else if (id === 'available') main.innerHTML = availableHTML();
+      else if (id === 'bills') main.innerHTML = billsHTML();
+      else main.innerHTML = `<div class="text-center py-20 text-muted"><p class="text-4xl mb-3">🚧</p><p class="font-medium">${id.replace(/-/g,' ')}</p><p class="text-sm mt-1">Full panel in the React app (npm run dev)</p></div>`;
+    }
+
+    function liveOrdersHTML() {
+      return `
+        <div class="max-w-[1500px] mx-auto">
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Kitchen Desk / Today</p>
+              <h1 class="text-2xl font-bold tracking-tight">Live Orders</h1>
+              <p class="text-sm text-muted mt-1">Keep every ticket moving with a clear line of sight.</p>
+            </div>
+            <button class="flex items-center gap-2 px-4 py-2 rounded-xl border border-line bg-surface2 text-sm font-medium">🔔 Sound on</button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            ${[['Active tickets','04','+2 since 12:00','🎫'],['Rush orders','01','Needs attention','🔥'],['Ready to serve','01','Waiter notified','✓'],['Avg. prep time','11m','-2m today','⏱']].map(([l,v,s,i])=>`
+              <div class="card p-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-surface2 flex items-center justify-center text-lg">${i}</div>
+                <div><p class="text-xs text-muted">${l}</p><p class="text-2xl font-bold tabular">${v}</p><p class="text-[11px] text-muted">${s}</p></div>
+              </div>`).join('')}
+          </div>
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <div class="flex items-center gap-1 p-1 rounded-xl bg-surface2 border border-line">
+              <button class="px-3 py-1.5 rounded-lg text-sm font-medium bg-surface text-ink shadow">All</button>
+              <button class="px-3 py-1.5 rounded-lg text-sm font-medium text-muted">New <span class="ml-1 inline-flex w-5 h-5 rounded-full bg-accent text-black text-[10px] font-bold items-center justify-center">2</span></button>
+              <button class="px-3 py-1.5 rounded-lg text-sm font-medium text-muted">Preparing</button>
+              <button class="px-3 py-1.5 rounded-lg text-sm font-medium text-muted">Ready</button>
+              <button class="px-3 py-1.5 rounded-lg text-sm font-medium text-muted">Served</button>
+            </div>
+          </div>
+          <p class="text-sm text-muted mb-4">4 tickets in view</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <!-- T-04 Preparing -->
+            <div class="card p-4 border border-amber-500/30">
+              <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl font-extrabold text-amber-400">T-04</span>
+                  <span class="px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">TOKEN #44</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase border bg-amber-500/20 text-amber-400 border-amber-500/30">PREPARING</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-muted mb-3"><span class="font-mono">ORD-8421</span><span>⏱ 08:42</span></div>
+              <div class="mb-3"><span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-xs font-medium">🔗 G-77 · linked tables</span></div>
+              <div class="space-y-2 mb-3 text-sm">
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-green-500 bg-green-500/20 text-green-400 flex items-center justify-center text-xs">✓</span><span class="flex-1 text-green-400">Paneer Butter Masala × 1</span><span class="text-xs text-muted">Grill</span></div>
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-amber-500"></span><span class="flex-1">Butter Naan × 2</span><span class="text-xs text-muted">Tandoor</span></div>
+              </div>
+              <div class="flex items-center justify-between text-xs text-muted mb-3 pt-2 border-t border-line">
+                <span>👤 Seat 2</span>
+                <div class="flex items-center gap-2"><span class="text-red-400 font-semibold">🔥 RUSH</span><span class="font-semibold text-ink tabular">₹398</span></div>
+              </div>
+              <div class="flex gap-2">
+                <button class="flex-1 h-10 rounded-xl border border-line bg-surface2 text-sm font-medium text-muted">Cannot make</button>
+                <button class="flex-1 h-10 rounded-xl bg-accent text-black text-sm font-bold">Mark ready ✓</button>
+              </div>
+            </div>
+            <!-- T-07 New -->
+            <div class="card p-4 border border-blue-500/30 pulse-new">
+              <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl font-extrabold text-blue-400">T-07</span>
+                  <span class="px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">TOKEN #47</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase border bg-blue-500/20 text-blue-400 border-blue-500/30">NEW</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-muted mb-3"><span class="font-mono">ORD-8422</span><span>⏱ 02:16</span></div>
+              <div class="mb-3"><span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-xs font-medium">🔗 G-77 · linked tables</span></div>
+              <div class="space-y-2 mb-3 text-sm">
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-line"></span><span class="flex-1">Veg Biryani × 2</span><span class="text-xs text-muted">Grill</span></div>
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-line"></span><span class="flex-1">Mango Lassi × 2</span><span class="text-xs text-muted">Bar</span></div>
+              </div>
+              <div class="flex items-center justify-between text-xs text-muted mb-3 pt-2 border-t border-line">
+                <span>👤 Shared</span><span class="font-semibold text-ink tabular">₹800</span>
+              </div>
+              <button class="w-full h-10 rounded-xl bg-accent text-black text-sm font-bold">Start preparing</button>
+            </div>
+            <!-- T-02 Ready -->
+            <div class="card p-4 border border-green-500/30">
+              <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl font-extrabold text-green-400">T-02</span>
+                  <span class="px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">TOKEN #42</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase border bg-green-500/20 text-green-400 border-green-500/30">READY</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-muted mb-3"><span class="font-mono">ORD-8418</span><span>⏱ 12:04</span></div>
+              <div class="space-y-2 mb-3 text-sm">
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-green-500 bg-green-500/20 text-green-400 flex items-center justify-center text-xs">✓</span><span class="flex-1 text-green-400">Chicken Biryani × 1</span><span class="text-xs text-muted">Grill</span></div>
+                <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full border-2 border-line"></span><span class="flex-1">Garlic Naan × 1</span><span class="text-xs text-muted">Tandoor</span></div>
+              </div>
+              <div class="flex items-center justify-between text-xs text-muted mb-3 pt-2 border-t border-line">
+                <span>👤 Seat 4</span><span class="font-semibold text-ink tabular text-green-400">₹415</span>
+              </div>
+              <button class="w-full h-10 rounded-xl bg-accent text-black text-sm font-bold">Ready for pickup →</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function stockHTML() {
+      const items = [
+        ['Paneer Butter Masala','Main',280,18],['Butter Naan','Bread',60,45],['Chicken Biryani','Rice',320,12],
+        ['Veg Biryani','Rice',260,8],['Garlic Naan','Bread',70,30],['Mango Lassi','Beverage',90,20],
+        ['Dal Makhani','Main',220,15],['Gulab Jamun','Dessert',80,3]
+      ];
+      return `<div class="max-w-[1500px] mx-auto">
+        <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Kitchen Desk</p>
+        <h1 class="text-2xl font-bold tracking-tight mb-1">Kitchen Stock</h1>
+        <p class="text-sm text-muted mb-6">Primary job — manage stock so customers never order what you can't make.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          ${items.map(([n,c,p,s])=>`
+            <div class="card p-4 relative">
+              ${s<=5?`<span class="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-400 text-[10px] font-bold">LOW</span>`:''}
+              <div class="w-12 h-12 rounded-xl bg-surface2 flex items-center justify-center mb-3 text-xl">📦</div>
+              <h3 class="font-semibold text-sm mb-0.5">${n}</h3>
+              <p class="text-xs text-muted mb-2">${c}</p>
+              <p class="text-lg font-bold text-accent tabular mb-3">₹${p}</p>
+              <div class="flex items-center gap-2 mb-3"><label class="text-xs text-muted">Stock</label>
+                <input type="number" value="${s}" class="w-20 h-9 px-2 rounded-lg bg-surface2 border border-line text-sm tabular text-center" />
+                <span class="text-xs text-muted">→ ${s} plates</span></div>
+              <button class="w-full h-10 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 text-sm font-semibold">Mark Sold Out</button>
+            </div>`).join('')}
+        </div></div>`;
+    }
+
+    function attendanceHTML() {
+      return `<div class="max-w-[900px] mx-auto">
+        <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Attendance</p>
+        <h1 class="text-2xl font-bold tracking-tight mb-1">My Attendance</h1>
+        <p class="text-sm text-muted mb-6">Only your own attendance is visible.</p>
+        <div class="card p-5 mb-6">
+          <div class="flex items-center justify-between mb-4">
+            <div><p class="text-xs text-muted font-semibold uppercase tracking-wider">Today</p>
+              <p class="text-lg font-bold mt-0.5">Sunday, 27 September</p></div>
+            <div class="px-3 py-1.5 rounded-lg text-sm font-bold uppercase bg-green-500/15 text-green-400">Present</div>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+            <div class="rounded-xl bg-surface2 border border-line p-3"><p class="text-[11px] text-muted mb-1">Check In</p><p class="text-lg font-bold tabular">10:05</p></div>
+            <div class="rounded-xl bg-surface2 border border-line p-3"><p class="text-[11px] text-muted mb-1">Check Out</p><p class="text-lg font-bold tabular">—</p></div>
+            <div class="rounded-xl bg-surface2 border border-line p-3"><p class="text-[11px] text-muted mb-1">Breaks</p><p class="text-lg font-bold tabular">0</p></div>
+            <div class="rounded-xl bg-surface2 border border-line p-3"><p class="text-[11px] text-muted mb-1">Shift Start</p><p class="text-lg font-bold tabular">10:00</p></div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="flex items-center gap-2 px-4 h-11 rounded-xl border border-line bg-surface2 text-sm font-medium">☕ Break In</button>
+            <button class="flex items-center gap-2 px-5 h-11 rounded-xl bg-red-500/15 text-red-400 border border-red-500/30 font-bold text-sm">⎋ Check Out</button>
+          </div>
+        </div>
+        <div class="card p-5"><h2 class="text-sm font-semibold mb-4">Last 30 Days</h2>
+          <div class="flex flex-wrap gap-4 text-xs text-muted">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-green-500"></span> Present</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500"></span> Late</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500"></span> Absent</span>
+          </div>
+        </div></div>`;
+    }
+
+    function leaveHTML() {
+      return `<div class="max-w-[900px] mx-auto">
+        <div class="flex items-start justify-between mb-6">
+          <div><p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Leave</p>
+            <h1 class="text-2xl font-bold tracking-tight">Leave Requests</h1>
+            <p class="text-sm text-muted mt-1">Submit requests · Approval via Manager panel (future)</p></div>
+          <button class="px-5 h-11 rounded-xl bg-accent text-black font-bold text-sm">+ Request Leave</button>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div class="card p-4"><p class="text-xs text-muted mb-1">Casual Leave</p><p class="text-3xl font-bold tabular text-blue-400">8</p><p class="text-[11px] text-muted">of 12 remaining</p></div>
+          <div class="card p-4"><p class="text-xs text-muted mb-1">Sick Leave</p><p class="text-3xl font-bold tabular text-green-400">5</p><p class="text-[11px] text-muted">of 6 remaining</p></div>
+          <div class="card p-4"><p class="text-xs text-muted mb-1">Paid Leave</p><p class="text-3xl font-bold tabular text-accent">3</p><p class="text-[11px] text-muted">of 5 remaining</p></div>
+        </div>
+        <div class="card overflow-hidden">
+          <div class="px-5 py-3 border-b border-line"><h2 class="text-sm font-semibold">Request History</h2></div>
+          <div class="p-10 text-center text-muted"><p class="text-3xl mb-2">🌴</p><p class="font-medium">Koi leave request nahi hai</p><p class="text-sm mt-1">Submit your first request above</p></div>
+        </div></div>`;
+    }
+
+    function myTablesHTML() {
+      return `<div class="max-w-[1500px] mx-auto">
+        <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Waiter Desk</p>
+        <h1 class="text-2xl font-bold tracking-tight mb-1">My Tables</h1>
+        <p class="text-sm text-muted mb-6">Tables you have claimed · Max 8</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div class="card p-4">
+            <div class="flex items-start justify-between mb-3">
+              <div><span class="text-2xl font-extrabold text-accent">T-04</span>
+                <span class="ml-2 px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">TOKEN #44</span></div>
+              <span class="px-2 py-1 rounded-lg bg-green-500/15 text-green-400 text-[11px] font-bold uppercase">occupied</span>
+            </div>
+            <div class="text-xs text-muted mb-3">4 seats · Zone A · <span class="text-accent font-semibold">1 active order</span></div>
+            <div class="mb-3"><span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-xs font-medium">🔗 G-77 · LINKED</span></div>
+            <div class="rounded-lg bg-surface2 border border-line p-2.5 mb-3 text-sm">
+              <div class="flex justify-between mb-1"><span class="font-mono text-xs text-muted">ORD-8421</span><span class="text-xs capitalize text-amber-400">preparing</span></div>
+              <div class="text-xs text-muted">Paneer Butter Masala × 1</div>
+              <div class="text-xs text-muted">Butter Naan × 2</div>
+              <div class="text-right text-sm font-semibold tabular mt-1">₹398</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 h-10 rounded-xl bg-accent text-black text-sm font-bold">+ Add Item</button>
+              <button class="h-10 px-4 rounded-xl border border-line text-sm font-medium text-muted">Free</button>
+            </div>
+          </div>
+          <div class="card p-4">
+            <div class="flex items-start justify-between mb-3">
+              <div><span class="text-2xl font-extrabold text-accent">T-07</span>
+                <span class="ml-2 px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">TOKEN #47</span></div>
+              <span class="px-2 py-1 rounded-lg bg-green-500/15 text-green-400 text-[11px] font-bold uppercase">occupied</span>
+            </div>
+            <div class="text-xs text-muted mb-3">4 seats · Zone A · <span class="text-accent font-semibold">1 active order</span></div>
+            <div class="mb-3"><span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-xs font-medium">🔗 G-77 · LINKED</span></div>
+            <div class="flex gap-2 mt-3">
+              <button class="flex-1 h-10 rounded-xl bg-accent text-black text-sm font-bold">+ Add Item</button>
+              <button class="h-10 px-4 rounded-xl border border-line text-sm font-medium text-muted">Free</button>
+            </div>
+          </div>
+        </div></div>`;
+    }
+
+    function availableHTML() {
+      return `<div class="max-w-[1500px] mx-auto">
+        <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Waiter Desk</p>
+        <h1 class="text-2xl font-bold tracking-tight mb-1">Available Tables</h1>
+        <p class="text-sm text-muted mb-6">Free tables ready to claim · First wins</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          ${[['T-01',4,'A',38],['T-03',6,'A',31],['T-05',2,'B',22],['T-08',4,'B',19]].map(([t,s,z,tok])=>`
+            <div class="card p-4">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-2xl font-extrabold">${t}</span>
+                <span class="px-2 py-1 rounded-lg bg-green-500/15 text-green-400 text-[11px] font-bold uppercase">Free</span>
+              </div>
+              <div class="text-xs text-muted space-y-1 mb-4"><p>${s} seats · Zone ${z}</p><p>Token will be #${tok}</p></div>
+              <button class="w-full h-11 rounded-xl bg-accent text-black font-bold text-sm">Accept Table</button>
+            </div>`).join('')}
+        </div></div>`;
+    }
+
+    function billsHTML() {
+      return `<div class="max-w-[1200px] mx-auto">
+        <p class="text-xs font-semibold text-muted tracking-widest uppercase mb-1">Accountant Desk</p>
+        <h1 class="text-2xl font-bold tracking-tight mb-1">Bills</h1>
+        <p class="text-sm text-muted mb-6">Collect payments · Generate receipts</p>
+        <h2 class="text-sm font-semibold mb-3 text-muted uppercase tracking-wider">Pending (1)</h2>
+        <div class="card p-4 flex items-center justify-between mb-8">
+          <div>
+            <div class="flex items-center gap-2 mb-1"><span class="text-lg font-bold">T-02</span>
+              <span class="px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">#42</span></div>
+            <p class="text-xs text-muted">Subtotal ₹390 · CGST ₹9.75 · SGST ₹9.75</p>
+          </div>
+          <div class="text-right">
+            <p class="text-2xl font-bold tabular text-accent">₹415</p>
+            <button class="mt-2 px-5 h-10 rounded-xl bg-accent text-black font-bold text-sm">Collect</button>
+          </div>
+        </div>
+        <h2 class="text-sm font-semibold mb-3 text-muted uppercase tracking-wider">Paid (1)</h2>
+        <div class="card p-3 flex items-center justify-between opacity-80">
+          <div class="flex items-center gap-3">
+            <span class="font-bold">T-01</span>
+            <span class="text-xs text-muted">RCP-20260514-0042</span>
+            <span class="px-2 py-0.5 rounded bg-green-500/15 text-green-400 text-[10px] font-bold uppercase">upi</span>
+          </div>
+          <span class="font-bold tabular">₹538</span>
+        </div></div>`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+================================================
+  QR DINE STAFF OPS — KAISÉ OPEN KAREIN
+================================================
+
+Yeh poora project MAIN ne banaya hai (aapne sirf instructions + screenshots diye the).
+
+------------------------------------------------
+TARIKA 1 — COMPUTER PAR CHALAO (recommended)
+------------------------------------------------
+
+1. Folder open karo:
+   artifacts/qr-dine-staff-ops
+
+2. Terminal open karo us folder mein, phir ye commands chalao:
+
+   npm install
+   npm run dev
+
+3. Browser mein jao:
+   http://localhost:5173
+
+4. Login:
+   Kitchen     → Staff ID: 1001   PIN: 1001
+   Waiter      → Staff ID: 2002   PIN: 2002
+   Accountant  → Staff ID: 3003   PIN: 3003
+
+------------------------------------------------
+TARIKA 2 — AGAR npm install fail ho
+------------------------------------------------
+
+   rm -rf node_modules package-lock.json
+   npm install --legacy-peer-deps
+   npm run dev
+
+------------------------------------------------
+PREVIEW HTML (bina npm ke)
+------------------------------------------------
+
+Folder mein PREVIEW.html file bhi hai.
+Usse double-click karke browser mein khol sakte ho
+(login + kitchen screen dekhne ke liye).
+
+------------------------------------------------
+FOLDER STRUCTURE
+------------------------------------------------
+
+qr-dine-staff-ops/
+├── src/
+│   ├── pages/
+│   │   ├── Login.tsx
+│   │   ├── kitchen/   (LiveOrders, KitchenStock)
+│   │   ├── waiter/    (MyTables, AvailableTables)
+│   │   ├── accountant/(Bills)
+│   │   └── shared/    (Attendance, Leave)  ← sab roles ke liye
+│   ├── components/    (Header, Sidebar, Toast)
+│   ├── hooks/         (useApp — state)
+│   ├── data/          (mock data)
+│   ├── types/
+│   └── utils/
+├── package.json
+├── vite.config.ts
+├── index.html
+└── README.md
+
+================================================
