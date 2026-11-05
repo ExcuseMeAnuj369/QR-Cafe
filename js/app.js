@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — APPLICATION CORE ROUTER & NAVIGATION
+ * QR-Cafe — APPLICATION CORE ROUTER & NAVIGATION
  * Manages 9 Master Sections, Role Permissions & Live Shift Timers
  * ===================================================================
  */

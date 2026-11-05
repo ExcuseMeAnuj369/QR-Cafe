@@ -1,7 +1,7 @@
 {
-  "name": "qr-dine-owner-ops",
+  "name": "QR-Cafe-owner-ops",
   "version": "1.0.0",
-  "description": "QR Dine Enterprise Ops — Owner & Manager Command Center",
+  "description": "QR-Cafe Enterprise Ops — Owner & Manager Command Center",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -11,7 +11,7 @@
   },
   "keywords": [
     "restaurant-erp",
-    "qrdine",
+    "qr-cafe",
     "dashboard"
   ],
   "author": "",

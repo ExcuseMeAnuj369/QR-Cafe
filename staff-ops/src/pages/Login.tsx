@@ -39,7 +39,7 @@ export function Login() {
             <span className="text-black font-black text-lg">🔥</span>
           </div>
           <span className="text-xl font-bold tracking-tight">
-            QR DINE <span className="text-accent">OPS</span>
+            QR-Cafe <span className="text-accent">OPS</span>
           </span>
         </div>
 

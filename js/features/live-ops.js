@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 4: LIVE OPERATIONS (READ-ONLY MONITOR) [BOTH]
+ * QR-Cafe — SECTION 4: LIVE OPERATIONS (READ-ONLY MONITOR) [BOTH]
  * 4.1 Kitchen Kanban (New -> Preparing -> Ready with Red Pulse > 10m)
  * 4.2 Waiter Floor Coverage & Service Requests
  * 4.3 Cashier Pending Settlements & Method Totals
@@ -858,7 +858,7 @@ function openCustomerInvoiceModal(billId) {
       
       <!-- Restaurant Header -->
       <div class="text-center border-b border-dashed border-gray-400 pb-3">
-        <div class="text-base font-black tracking-wider uppercase">👑 QR DINE RESTAURANT</div>
+        <div class="text-base font-black tracking-wider uppercase">👑 QR-Cafe RESTAURANT</div>
         <div class="text-[10px] text-gray-700">100 Feet Road, Indiranagar, Bengaluru - 560038</div>
         <div class="text-[10px] text-gray-700 font-bold mt-1">GSTIN: 29ABCDE1234F1Z5 · FSSAI: 11223334000123</div>
         <div class="text-[11px] font-bold mt-1 uppercase tracking-widest text-gray-900 border-t border-b border-gray-300 py-0.5">

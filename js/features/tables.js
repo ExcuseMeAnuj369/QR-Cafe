@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 9: TABLES & QR MANAGEMENT (DEEP DIVE) [BOTH]
+ * QR-Cafe — SECTION 9: TABLES & QR MANAGEMENT (DEEP DIVE) [BOTH]
  * 9.1 Interactive Floor Plan View & Table CRUD (Drag & Drop layout)
  * 9.2 QR Standee Generation (Download PNG, PDF A4, Thermal Print direct)
  * 9.3 Merge Tables for Large Groups (Creates combined group_id)
@@ -202,7 +202,7 @@ function openQRModal(tableId) {
   const t = STATE.tables.find(x => x.id === tableId);
   if (!t) return;
 
-  const qrUrl = `https://qrdine.com/t/${t.id}`;
+  const qrUrl = `https://qr-cafe.com/t/${t.id}`;
   // Standard SVG QR mock rendering
   const qrSvg = `
     <svg viewBox="0 0 160 160" class="w-48 h-48 mx-auto bg-white p-3 rounded-2xl shadow-xl">

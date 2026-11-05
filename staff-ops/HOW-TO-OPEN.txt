@@ -1,5 +1,5 @@
 ================================================
-  QR DINE STAFF OPS — KAISÉ OPEN KAREIN
+  QR-Cafe STAFF OPS — KAISÉ OPEN KAREIN
 ================================================
 
 Yeh poora project MAIN ne banaya hai (aapne sirf instructions + screenshots diye the).
@@ -9,7 +9,7 @@ TARIKA 1 — COMPUTER PAR CHALAO (recommended)
 ------------------------------------------------
 
 1. Folder open karo:
-   artifacts/qr-dine-staff-ops
+   artifacts/QR-Cafe-staff-ops
 
 2. Terminal open karo us folder mein, phir ye commands chalao:
 
@@ -44,7 +44,7 @@ Usse double-click karke browser mein khol sakte ho
 FOLDER STRUCTURE
 ------------------------------------------------
 
-qr-dine-staff-ops/
+QR-Cafe-staff-ops/
 ├── src/
 │   ├── pages/
 │   │   ├── Login.tsx

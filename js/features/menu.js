@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 8: MENU & PRICING (DEEP DIVE) [BOTH]
+ * QR-Cafe — SECTION 8: MENU & PRICING (DEEP DIVE) [BOTH]
  * 8.1 Menu CRUD & UI Layout (Two-Column, Station Routing, Owner Locked Pricing, Aggregator Sync)
  * 8.2 BCG Menu Engineering Scatter Plot Matrix (Stars, Plowhorses, Puzzles, Dogs)
  * ===================================================================

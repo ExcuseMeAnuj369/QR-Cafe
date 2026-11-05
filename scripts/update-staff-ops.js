@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const STAFF_OPS_ROOT = 'C:\\Users\\anuj dubey\\Desktop\\qr-dine-staff-ops';
+const STAFF_OPS_ROOT = 'C:\\Users\\anuj dubey\\Desktop\\QR-Cafe-staff-ops';
 
 // 1. UPDATE Attendance.tsx
 const attendanceFile = path.join(STAFF_OPS_ROOT, 'src', 'pages', 'shared', 'Attendance.tsx');
@@ -165,8 +165,8 @@ let useAppContent = fs.readFileSync(useAppFile, 'utf8');
 // Ensure API_BASE constant is present
 if (!useAppContent.includes('const API_BASE')) {
   useAppContent = useAppContent.replace(
-    "const STORAGE_PREFIX = 'qr_dine_ops_v1_';",
-    `const API_BASE = 'http://localhost:3000/api';\nconst STORAGE_PREFIX = 'qr_dine_ops_v1_';`
+    "const STORAGE_PREFIX = 'QR-Cafe_ops_v1_';",
+    `const API_BASE = 'http://localhost:3000/api';\nconst STORAGE_PREFIX = 'QR-Cafe_ops_v1_';`
   );
 }
 

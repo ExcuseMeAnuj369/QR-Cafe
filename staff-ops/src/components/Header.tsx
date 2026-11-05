@@ -30,7 +30,7 @@ export function Header({ onOpenProfile }: HeaderProps) {
           <span className="text-sm">🔥</span>
         </div>
         <span className="font-bold text-sm tracking-tight hidden sm:block">
-          QR DINE <span className="text-accent">OPS</span>
+          QR-Cafe <span className="text-accent">OPS</span>
         </span>
       </div>
 

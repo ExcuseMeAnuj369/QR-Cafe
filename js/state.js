@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — THE DEFINITIVE ENTERPRISE STATE & DATA STORE
+ * QR-Cafe — THE DEFINITIVE ENTERPRISE STATE & DATA STORE
  * Indian Restaurant ERP Architecture (Zero-Bug Specification)
  * ===================================================================
  */
@@ -11,7 +11,7 @@ const STATE = {
     name: 'Anika Rao',
     role: 'owner', // Default role; can toggle to 'manager' in UI
     initials: 'AR',
-    email: 'owner@qrdine.demo'
+    email: 'owner@qr-cafe.demo'
   },
 
   theme: 'dark', // 'dark', 'amoled', 'light'
@@ -417,7 +417,7 @@ const STATE = {
   // 6. Live Operations: Kitchen Kanban, Waiter Coverage, Cashier Collections
   kitchenOrders: [
     { id: 'ORD-8422', table: 'T-07', items: ['Tandoori Chicken (Half)', 'Masala Chai x2'], status: 'New', timeElapsedMin: 14, source: 'Staff Ops Waiter' }, // > 10m -> Red Pulse!
-    { id: 'ORD-8425', table: 'T-11', items: ['Paneer Butter Masala', 'Garlic Naan x3'], status: 'New', timeElapsedMin: 4, source: 'QR Dine Mobile' },
+    { id: 'ORD-8425', table: 'T-11', items: ['Paneer Butter Masala', 'Garlic Naan x3'], status: 'New', timeElapsedMin: 4, source: 'QR-Cafe Mobile' },
     { id: 'ORD-8418', table: 'T-04', items: ['Butter Chicken', 'Dal Makhani', 'Garlic Naan x4'], status: 'Preparing', timeElapsedMin: 16, source: 'Staff Ops Waiter' },
     { id: 'ORD-8415', table: 'T-01', items: ['Paneer Butter Masala', 'Garlic Naan x2'], status: 'Preparing', timeElapsedMin: 12, source: 'Staff Ops Waiter' },
     { id: 'ORD-8412', table: 'T-06', items: ['Gulab Jamun (2pc) x3'], status: 'Ready', timeElapsedMin: 8, source: 'Staff Ops Waiter' }
@@ -480,7 +480,7 @@ const STATE = {
 
   // 8. Settings & Business Rules [OWNER ONLY]
   settings: {
-    outletName: 'QR Dine Restaurant & Rooftop Bar',
+    outletName: 'QR-Cafe Restaurant & Rooftop Bar',
     branch: 'Koramangala 5th Block, Bengaluru',
     gstin: '29AABCT1332L1ZV',
     fssai: '11223344556677',

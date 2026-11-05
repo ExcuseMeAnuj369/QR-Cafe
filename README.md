@@ -1,4 +1,4 @@
-# 👑 QR DINE — Enterprise Owner & Manager Unified Console
+# 👑 QR-Cafe — Enterprise Owner & Manager Unified Console
 ### Zero-Bug Architecture · Indian Context · 20-Page Enterprise Specification
 
 Production-grade **Owner (Super Admin)** and **Manager (Operations Admin)** unified dashboard for Indian restaurants.
@@ -23,8 +23,8 @@ npm start
 ## 🔑 Demo Access & PINs
 | Role | Email | Password | Access Level | PIN |
 | :--- | :--- | :--- | :--- | :--- |
-| **👑 Super Admin (Owner)** | `owner@qrdine.demo` | `owner123` | Unrestricted (Financials, Menu Pricing, Base Wages, GST & Tax Config, True P&L) | **`9999`** |
-| **👔 Ops Admin (Manager)** | `manager@qrdine.demo` | `manager123` | Operations (Staff, Attendance, Inventory, Floor, Approvals). Restricted fields demand **Owner Override**. | **`1234`** |
+| **👑 Super Admin (Owner)** | `owner@qr-cafe.demo` | `owner123` | Unrestricted (Financials, Menu Pricing, Base Wages, GST & Tax Config, True P&L) | **`9999`** |
+| **👔 Ops Admin (Manager)** | `manager@qr-cafe.demo` | `manager123` | Operations (Staff, Attendance, Inventory, Floor, Approvals). Restricted fields demand **Owner Override**. | **`1234`** |
 
 > **💡 Real-Time Role Switcher:** You can switch instantly between **👑 Owner** and **👔 Manager** directly on the top navigation bar to test role permissions, locked fields, and the Owner Override protocol!
 
@@ -39,7 +39,7 @@ npm start
 
 ## 📁 Modular Codebase Structure
 ```
-qr-dine-owner-ops/
+QR-Cafe-owner-ops/
 ├── index.html                 # Lean HTML shell with Slide-Overs, Floating Cards & Toasts
 ├── css/
 │   └── styles.css             # Glassmorphism, themes (Dark, AMOLED, Light), Saffron accents, animations

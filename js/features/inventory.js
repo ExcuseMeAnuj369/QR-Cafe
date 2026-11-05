@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 7: INVENTORY & RECIPES (THE MONEY SAVER) [BOTH]
+ * QR-Cafe — SECTION 7: INVENTORY & RECIPES (THE MONEY SAVER) [BOTH]
  * 7.1 Ingredient Master & Par Level Stock Tracking
  * 7.2 Recipe Builder, Live Food Cost % (> 35% Red Alert), Auto-Deduction
  * 7.3 Procurement, Vendor Ledgers, WhatsApp POs & Wastage Logs

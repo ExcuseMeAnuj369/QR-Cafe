@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 10: FINANCIALS & APPROVALS (DEEP DIVE) [BOTH]
+ * QR-Cafe — SECTION 10: FINANCIALS & APPROVALS (DEEP DIVE) [BOTH]
  * 10.1 Day Close (Z-Report & Cash Reconciliation with > ₹100 Discrepancy Reason)
  * 10.2 Approvals Inbox (Fraud Prevention, Discount Escalation to Owner PIN)
  * 10.3 GST Compliance [OWNER ONLY] & Petty Cash Ledger [BOTH]

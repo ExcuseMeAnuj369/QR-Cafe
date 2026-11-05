@@ -82,7 +82,7 @@ const AppContext = createContext<AppContextType | null>(null);
 export const API_BASE = typeof window !== 'undefined' && window.location.port === '3000'
   ? `${window.location.origin}/api`
   : 'http://localhost:3000/api';
-const STORAGE_PREFIX = 'qr_dine_ops_v1_';
+const STORAGE_PREFIX = 'QR-Cafe_ops_v1_';
 
 export function normalizeStaffRole(rawRole?: string, staffRole?: string): Role {
   const sRole = (staffRole || '').toLowerCase();

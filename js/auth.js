@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — AUTHENTICATION & SESSION MANAGEMENT
+ * QR-Cafe — AUTHENTICATION & SESSION MANAGEMENT
  * Super Admin (Owner) vs Operations Admin (Manager)
  * ===================================================================
  */
@@ -12,7 +12,7 @@ function selectDemoAccount(role) {
   const mgrBtn = $('#login-role-manager-btn');
 
   if (role === 'owner') {
-    if (emailInput) emailInput.value = 'owner@qrdine.demo';
+    if (emailInput) emailInput.value = 'owner@qr-cafe.demo';
     if (passInput) passInput.value = 'owner123';
     if (ownerBtn) {
       ownerBtn.className = 'py-2.5 px-3 rounded-lg border border-saffron-500/40 bg-saffron-500/10 text-saffron-400 text-xs font-semibold flex items-center justify-center gap-1.5 transition';
@@ -21,7 +21,7 @@ function selectDemoAccount(role) {
       mgrBtn.className = 'py-2.5 px-3 rounded-lg border border-white/10 bg-dark-700/50 text-gray-400 text-xs font-semibold flex items-center justify-center gap-1.5 transition hover:text-white';
     }
   } else {
-    if (emailInput) emailInput.value = 'manager@qrdine.demo';
+    if (emailInput) emailInput.value = 'manager@qr-cafe.demo';
     if (passInput) passInput.value = 'manager123';
     if (mgrBtn) {
       mgrBtn.className = 'py-2.5 px-3 rounded-lg border border-saffron-500/40 bg-saffron-500/10 text-saffron-400 text-xs font-semibold flex items-center justify-center gap-1.5 transition';
@@ -80,9 +80,9 @@ function applyUserSession(user, skipToast = false) {
 function switchRole(role) {
   let user = null;
   if (role === 'owner') {
-    user = { name: 'Anika Rao', role: 'owner', initials: 'AR', email: 'owner@qrdine.demo' };
+    user = { name: 'Anika Rao', role: 'owner', initials: 'AR', email: 'owner@qr-cafe.demo' };
   } else {
-    user = { name: 'Rajesh Kumar', role: 'manager', initials: 'RK', email: 'manager@qrdine.demo' };
+    user = { name: 'Rajesh Kumar', role: 'manager', initials: 'RK', email: 'manager@qr-cafe.demo' };
   }
   applyUserSession(user);
 }
@@ -104,9 +104,9 @@ function login(e) {
   const pass = passInput ? passInput.value : '';
 
   let user = null;
-  if (email === 'owner@qrdine.demo' && pass === 'owner123') {
+  if (email === 'owner@qr-cafe.demo' && pass === 'owner123') {
     user = { name: 'Anika Rao', role: 'owner', initials: 'AR', email };
-  } else if (email === 'manager@qrdine.demo' && pass === 'manager123') {
+  } else if (email === 'manager@qr-cafe.demo' && pass === 'manager123') {
     user = { name: 'Rajesh Kumar', role: 'manager', initials: 'RK', email };
   } else {
     showToast('Invalid credentials. Please enter correct password or click Owner/Manager demo options.', 'error');

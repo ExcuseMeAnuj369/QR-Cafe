@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — CENTRAL API CLIENT & REAL-TIME STATE SYNCHRONIZER
+ * QR-Cafe — CENTRAL API CLIENT & REAL-TIME STATE SYNCHRONIZER
  * Connects Owner Console with Unified Backend & Staff Operations
  * ===================================================================
  */

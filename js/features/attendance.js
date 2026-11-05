@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 6: ATTENDANCE & LEAVE PANEL (MERGED) [BOTH]
+ * QR-Cafe — SECTION 6: ATTENDANCE & LEAVE PANEL (MERGED) [BOTH]
  * 6.1 Live Roster (Avatar Grid, Clock Status, Audit-Reason Override)
  * 6.2 Leave Approvals (Balance Check, Understaffed Warning, Manager PIN)
  * 6.3 Shift Roster Planner (Mon-Sun, Double-Shift Conflict Validation)

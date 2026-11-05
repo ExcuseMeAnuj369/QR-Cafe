@@ -981,7 +981,7 @@ const server = http.createServer(async (req, res) => {
         fs.readFile(fallbackPath, (fbErr, content) => {
           if (fbErr) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
-            res.end('Staff App Not Found. Please build qr-dine-staff-ops.');
+            res.end('Staff App Not Found. Please build QR-Cafe-staff-ops.');
           } else {
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(content);
@@ -1040,7 +1040,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`QR Dine Unified Ops Server running at http://localhost:${PORT}`);
+  console.log(`QR-Cafe Unified Ops Server running at http://localhost:${PORT}`);
   console.log(`Owner Ops: http://localhost:${PORT}/`);
   console.log(`Staff Ops: http://localhost:${PORT}/staff/`);
   console.log(`API State: http://localhost:${PORT}/api/state`);

@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — DASHBOARD: THE COMMAND CENTER
+ * QR-Cafe — DASHBOARD: THE COMMAND CENTER
  * Refined SaaS Enterprise Design (Comfortable Contrast & Calibrated Typography)
  * 1. Top Section: 4 Compact KPI Cards (Balanced Font Hierarchy)
  * 2. Middle Section: 60% Sales Trend Chart + 40% Live Activity Feed

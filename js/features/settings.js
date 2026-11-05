@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — SECTION 11: BUSINESS SETTINGS [OWNER ONLY]
+ * QR-Cafe — SECTION 11: BUSINESS SETTINGS [OWNER ONLY]
  * 11.1 Business Rules (GST Rates, Manager Discount & Void Limits)
  * 11.2 Integrations (Zomato/Swiggy API Keys, WhatsApp WATI Tokens)
  * 11.3 Hardware (LAN Thermal Printer ESC/POS IP, Auto Cash Drawer)

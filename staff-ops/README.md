@@ -1,4 +1,4 @@
-# QR Dine Staff Ops
+# QR-Cafe Staff Ops
 
 Production-grade restaurant staff operations dashboard for Kitchen, Waiter, and Accountant.
 
@@ -13,7 +13,7 @@ Production-grade restaurant staff operations dashboard for Kitchen, Waiter, and 
 ## Run
 
 ```bash
-cd qr-dine-staff-ops
+cd QR-Cafe-staff-ops
 npm install
 npm run dev
 ```

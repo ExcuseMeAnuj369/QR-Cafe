@@ -1,6 +1,6 @@
 /**
  * ===================================================================
- * QR DINE — UTILITIES, SECURITY OVERRIDE & STATUTORY ENGINES
+ * QR-Cafe — UTILITIES, SECURITY OVERRIDE & STATUTORY ENGINES
  * Includes:
  * 1. Owner Override Protocol (Floating 4-digit PIN card, 5m timer, Audit Log)
  * 2. Right-side Slide-Over Drawers & Centered Modals
@@ -232,7 +232,7 @@ function switchRole(role) {
   STATE.user.role = role;
   STATE.user.name = role === 'owner' ? 'Anika Rao' : 'Rajesh Kumar';
   STATE.user.initials = role === 'owner' ? 'AR' : 'RK';
-  STATE.user.email = role === 'owner' ? 'owner@qrdine.demo' : 'manager@qrdine.demo';
+  STATE.user.email = role === 'owner' ? 'owner@qr-cafe.demo' : 'manager@qr-cafe.demo';
 
   // Update top bar labels
   $('#user-name').textContent = STATE.user.name;
@@ -412,7 +412,7 @@ function pageHeader(title, subtitle, actions = '') {
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
       <div>
         <div class="text-[11px] font-semibold text-saffron-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-          <span>QR DINE ENTERPRISE OPS</span>
+          <span>QR-Cafe ENTERPRISE OPS</span>
           <span class="text-gray-600">/</span>
           <span class="text-gray-400">${STATE.user.role.toUpperCase()} CONSOLE</span>
         </div>
