@@ -543,10 +543,14 @@ export default function BillPage() {
                       </span>
                     </div>
                     <p className="mt-0.5 text-[11px] sm:text-xs text-purple-200/80 leading-relaxed">
-                      Your table <span className="font-bold text-white">Table {bill.table_id}</span> is linked with{" "}
-                      <span className="font-bold text-purple-200">Table {bill.linked_table_id || "T-05"}</span> (Group ID:{" "}
-                      <span className="font-mono text-purple-200 font-bold">#{bill.group_id || "GRP-8812"}</span>).
-                      All 4 chairs are synchronized for split billing.
+                      Your table <span className="font-bold text-white">Table {bill.table_id}</span>
+                      {bill.linked_table_id ? (
+                        <> is linked with <span className="font-bold text-purple-200">Table {bill.linked_table_id}</span></>
+                      ) : null}
+                      {bill.group_id || session.group_id ? (
+                        <> (Group ID: <span className="font-mono text-purple-200 font-bold">#{bill.group_id || session.group_id}</span>)</>
+                      ) : null}
+                      . All chairs are synchronized for split billing.
                     </p>
                   </div>
                 </div>

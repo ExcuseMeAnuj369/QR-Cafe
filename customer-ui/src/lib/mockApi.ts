@@ -71,8 +71,8 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
       id,
       code,
       table_id: req.table_id || "T-04",
-      group_id: "GRP-8812", // Linked group demo
-      linked_table_id: "T-05", // Linked with Table T-05 for multi-table group scenario
+      group_id: null, // Starts standalone; groups only when customer/waiter explicitly pairs
+      linked_table_id: null,
       party_size: claimedChairs.length,
       is_host: chairId === 1,
       host_seat: 1,
@@ -82,8 +82,7 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
       claimed_chairs: claimedChairs,
       group_code: "4812",
       linked_members: [
-        { table_id: req.table_id || "T-04", chairs: claimedChairs, name: "Your Table" },
-        { table_id: "T-05", chairs: [1, 2], name: "Rohan & Family" },
+        { table_id: req.table_id || "T-04", chairs: claimedChairs, name: "Your Table" }
       ],
       language: req.language || "en",
       status: "active",
@@ -107,13 +106,13 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
       id,
       code: "SES-DEMO",
       table_id: "T-04",
-      group_id: "GRP-8812",
-      linked_table_id: "T-05",
-      party_size: 3,
+      group_id: null,
+      linked_table_id: null,
+      party_size: 1,
       is_host: true,
       host_seat: 1,
-      guest_seats: [2, 3],
-      seats_count: 3,
+      guest_seats: [],
+      seats_count: 1,
       language: "en" as Lang,
       status: "active",
       advance_paid: 0,
@@ -131,13 +130,13 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
       id,
       code: "SES-DEMO",
       table_id: "T-04",
-      group_id: "GRP-8812",
-      linked_table_id: "T-05",
-      party_size: 3,
+      group_id: null,
+      linked_table_id: null,
+      party_size: 1,
       is_host: true,
       host_seat: 1,
-      guest_seats: [2, 3],
-      seats_count: 3,
+      guest_seats: [],
+      seats_count: 1,
       language: "en" as Lang,
       status: "active",
       advance_paid: 0,
@@ -169,6 +168,8 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
   // 5. POST /order (with 20% Advance Payment verification)
   if (method === "POST" && url === "/order") {
     const req = body as OrderCreate;
+    const sessions = loadStorage<Record<string, QRDSession>>(SESSIONS_KEY, {});
+    const session = req.session_id ? sessions[req.session_id] : null;
     const orders = loadStorage<Order[]>(ORDERS_KEY, []);
     const existing = orders.find(o => (o as any).idempotency_key === req.idempotency_key);
     if (existing) return existing as unknown as T;
@@ -225,8 +226,8 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
       id: `ord-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       kot_number,
       session_id: req.session_id,
-      table_id: "T-04",
-      group_id: "GRP-8812",
+      table_id: session?.table_id || "T-04",
+      group_id: session?.group_id || null,
       items: orderItems,
       subtotal,
       advance_required: advanceRequired,
@@ -432,13 +433,12 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
 
     const status = balance === 0 && grand_total > 0 ? "paid" : totalPaidEver > 0 ? "partial" : "unpaid";
 
-    // Table Merging / Cross-Table Multi-Group Scenario:
-    // Simulated Linked Table (Table T-05) in group GRP-8812
-    const linkedTableId = session?.linked_table_id || "T-05";
-    const linkedTableLines: BillLine[] = [
+    // Only add linked table lines if this table was explicitly grouped
+    const linkedTableId = session?.linked_table_id || null;
+    const linkedTableLines: BillLine[] = linkedTableId ? [
       {
-        kot_number: "KOT-01 (T-05)",
-        table_id: "T-05",
+        kot_number: `KOT-01 (${linkedTableId})`,
+        table_id: linkedTableId,
         item_id: "item-paneer-tikka",
         name: { en: "Tandoori Paneer Tikka", hi: "तंदूरी पनीर टिक्का", mr: "तंदुरी पनीर टिक्का" },
         qty: 1,
@@ -447,22 +447,9 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
         seat: 1,
         spice: "medium",
         addons: [],
-        notes: "Linked Table T-05 Order",
-      },
-      {
-        kot_number: "KOT-01 (T-05)",
-        table_id: "T-05",
-        item_id: "item-mango-lassi",
-        name: { en: "Royal Alphonso Mango Lassi", hi: "शाही अल्फांसो मैंगो लस्सी", mr: "अल्फान्सो मँगो लस्सी" },
-        qty: 2,
-        price: 12000,
-        line_total: 24000,
-        seat: 2,
-        spice: null,
-        addons: [],
-        notes: null,
-      },
-    ];
+        notes: `Linked Table ${linkedTableId} Order`,
+      }
+    ] : [];
 
     const linkedSubtotal = linkedTableLines.reduce((s, l) => s + l.line_total, 0);
     const linkedGst = Math.round(linkedSubtotal * 0.05);
@@ -502,7 +489,7 @@ export function handleMockRequest<T>(method: string, path: string, body?: any): 
     const bill: Bill = {
       session_id: sessionId,
       table_id: session?.table_id || "T-04",
-      group_id: session?.group_id || "GRP-8812",
+      group_id: session?.group_id || null,
       linked_table_id: linkedTableId,
       lines,
       subtotal,

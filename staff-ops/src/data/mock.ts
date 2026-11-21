@@ -13,47 +13,45 @@ export const STAFF: Staff[] = [
 
 export const TABLES: Table[] = [
   {
-    id: 't1', table_number: 'T-01', max_seats: 4, current_token: 38, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free',
+    id: 't1', table_number: 'T-01', max_seats: 4, current_token: 1, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free',
     seats: [
-      { seat_no: 1, label: 'Seat 1 (Host)', phone_active: false },
-      { seat_no: 2, label: 'Seat 2 (Guest)', phone_active: false },
-      { seat_no: 3, label: 'Seat 3 (Guest)', phone_active: false },
-      { seat_no: 4, label: 'Seat 4 (Guest)', phone_active: false },
+      { seat_no: 1, label: 'Chair 1', phone_active: false },
+      { seat_no: 2, label: 'Chair 2', phone_active: false },
+      { seat_no: 3, label: 'Chair 3', phone_active: false },
+      { seat_no: 4, label: 'Chair 4', phone_active: false },
     ]
   },
   {
-    id: 't2', table_number: 'T-02', max_seats: 4, current_token: 42, current_session_id: 'sess-2', assigned_waiter_id: '2002', zone: 'A', group_id: null, status: 'occupied',
+    id: 't2', table_number: 'T-02', max_seats: 4, current_token: 2, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free',
     seats: [
-      { seat_no: 1, label: 'Chair 1 (Host)', phone_active: true },
-      { seat_no: 2, label: 'Chair 2: Guest of Host (Chair 1) [Senior - No Phone]', is_direct_claim: true, claimed_by_seat: 1, phone_active: false },
-      { seat_no: 3, label: 'Chair 3: Guest of Host (Chair 1) [Kid - No Phone]', is_direct_claim: true, claimed_by_seat: 1, phone_active: false },
-      { seat_no: 4, label: 'Chair 4: Diner (Phone Connected)', phone_active: true },
+      { seat_no: 1, label: 'Chair 1', phone_active: false },
+      { seat_no: 2, label: 'Chair 2', phone_active: false },
+      { seat_no: 3, label: 'Chair 3', phone_active: false },
+      { seat_no: 4, label: 'Chair 4', phone_active: false },
+    ]
+  },
+  { id: 't3', table_number: 'T-03', max_seats: 6, current_token: 3, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free' },
+  {
+    id: 't4', table_number: 'T-04', max_seats: 4, current_token: 4, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, linked_tables: [], status: 'free',
+    seats: [
+      { seat_no: 1, label: 'Chair 1', phone_active: false },
+      { seat_no: 2, label: 'Chair 2', phone_active: false },
+      { seat_no: 3, label: 'Chair 3', phone_active: false },
+      { seat_no: 4, label: 'Chair 4', phone_active: false },
     ]
   },
   {
-    id: 't3', table_number: 'T-03', max_seats: 6, current_token: 31, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free'
-  },
-  {
-    id: 't4', table_number: 'T-04', max_seats: 4, current_token: 44, current_session_id: 'sess-4', assigned_waiter_id: '2002', zone: 'A', group_id: 'GRP-8812', linked_tables: ['T-04', 'T-05'], status: 'occupied',
+    id: 't5', table_number: 'T-05', max_seats: 2, current_token: 5, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, linked_tables: [], status: 'free',
     seats: [
-      { seat_no: 1, label: 'Chair 1 (Host)', phone_active: true },
-      { seat_no: 2, label: 'Chair 2: Guest of Host [Senior - No Phone]', is_direct_claim: true, claimed_by_seat: 1, phone_active: false },
-      { seat_no: 3, label: 'Chair 3: Diner', phone_active: true },
-      { seat_no: 4, label: 'Chair 4: Empty', phone_active: false },
+      { seat_no: 1, label: 'Chair 1', phone_active: false },
+      { seat_no: 2, label: 'Chair 2', phone_active: false },
     ]
   },
-  {
-    id: 't5', table_number: 'T-05', max_seats: 2, current_token: 22, current_session_id: 'sess-5', assigned_waiter_id: '2002', zone: 'B', group_id: 'GRP-8812', linked_tables: ['T-04', 'T-05'], status: 'occupied',
-    seats: [
-      { seat_no: 1, label: 'Chair 1: Friend (Linked Group)', phone_active: true },
-      { seat_no: 2, label: 'Chair 2: Friend (Linked Group)', phone_active: true },
-    ]
-  },
-  { id: 't6', table_number: 'T-06', max_seats: 6, current_token: 15, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'cleaning' },
-  { id: 't7', table_number: 'T-07', max_seats: 4, current_token: 47, current_session_id: 'sess-7', assigned_waiter_id: '2002', zone: 'A', group_id: null, status: 'occupied' },
-  { id: 't8', table_number: 'T-08', max_seats: 4, current_token: 19, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'free' },
-  { id: 't9', table_number: 'T-09', max_seats: 6, current_token: 49, current_session_id: 'sess-9', assigned_waiter_id: '2004', zone: 'B', group_id: null, status: 'occupied' },
-  { id: 't10', table_number: 'T-10', max_seats: 4, current_token: 12, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'reserved' },
+  { id: 't6', table_number: 'T-06', max_seats: 6, current_token: 6, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'free' },
+  { id: 't7', table_number: 'T-07', max_seats: 4, current_token: 7, current_session_id: null, assigned_waiter_id: null, zone: 'A', group_id: null, status: 'free' },
+  { id: 't8', table_number: 'T-08', max_seats: 4, current_token: 8, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'free' },
+  { id: 't9', table_number: 'T-09', max_seats: 6, current_token: 9, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'free' },
+  { id: 't10', table_number: 'T-10', max_seats: 4, current_token: 10, current_session_id: null, assigned_waiter_id: null, zone: 'B', group_id: null, status: 'free' },
 ];
 
 export const MENU: MenuItem[] = [
@@ -71,198 +69,13 @@ export const MENU: MenuItem[] = [
   { id: 'm12', name: 'Masala Chai', category: 'Beverage', price: 40, stock: 50, low_stock_threshold: 10, sold_out: false, available: true, prep_minutes: 5, station: 'Bar', spice_options: false, addons: [], allergens: ['Dairy'], is_veg: true, is_jain: true },
 ];
 
-export const ORDERS: Order[] = [
-  {
-    id: 'ORD-8421',
-    session_id: 'sess-4',
-    table_id: 't4',
-    table_number: 'T-04',
-    token: 44,
-    group_id: 'GRP-8812',
-    status: 'preparing',
-    is_rush: true,
-    created_at: new Date(Date.now() - 8 * 60 * 1000).toISOString(),
-    total: 400,
-    advance_required: 80,
-    advance_paid: true,
-    advance_txn_id: 'UPI-ADV-9921',
-    waiter_id: '2002',
-    items: [
-      { id: 'oi1', menu_id: 'm1', name: 'Butter Chicken (Medium Spicy)', qty: 1, price: 280, seat_no: 1, seat_label: 'Seat 1 (Host)', status: 'ready', station: 'Grill', spice_level: 2 },
-      { id: 'oi2', menu_id: 'm2', name: 'Butter Naan', qty: 2, price: 60, seat_no: 2, seat_label: 'Seat 2 (Guest - No Phone)', status: 'preparing', station: 'Tandoor' },
-    ],
-  },
-  {
-    id: 'ORD-8425',
-    session_id: 'sess-4',
-    table_id: 't4',
-    table_number: 'T-04',
-    token: 44,
-    group_id: 'GRP-8812',
-    status: 'awaiting_advance',
-    is_rush: false,
-    created_at: new Date(Date.now() - 1 * 60 * 1000).toISOString(),
-    total: 580,
-    advance_required: 116,
-    advance_paid: false,
-    waiter_id: '2002',
-    items: [
-      { id: 'oi9', menu_id: 'm3', name: 'Chicken Biryani', qty: 1, price: 320, seat_no: 1, seat_label: 'Seat 1 (Host)', status: 'awaiting_advance', station: 'Grill' },
-      { id: 'oi10', menu_id: 'm4', name: 'Veg Biryani', qty: 1, price: 260, seat_no: 2, seat_label: 'Seat 2 (Guest - No Phone)', status: 'awaiting_advance', station: 'Grill' },
-    ],
-  },
-  {
-    id: 'ORD-8422',
-    session_id: 'sess-7',
-    table_id: 't7',
-    table_number: 'T-07',
-    token: 47,
-    group_id: null,
-    status: 'new',
-    is_rush: false,
-    created_at: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
-    total: 800,
-    advance_required: 160,
-    advance_paid: true,
-    advance_txn_id: 'UPI-ADV-9922',
-    waiter_id: '2002',
-    items: [
-      { id: 'oi3', menu_id: 'm4', name: 'Veg Biryani', qty: 2, price: 260, seat_no: 1, seat_label: 'Seat 1 (Host)', status: 'new', station: 'Grill' },
-      { id: 'oi4', menu_id: 'm6', name: 'Mango Lassi', qty: 2, price: 90, seat_no: 2, seat_label: 'Seat 2 (Diner)', status: 'new', station: 'Bar' },
-    ],
-  },
-  {
-    id: 'ORD-8418',
-    session_id: 'sess-2',
-    table_id: 't2',
-    table_number: 'T-02',
-    token: 42,
-    group_id: null,
-    status: 'ready',
-    is_rush: false,
-    created_at: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
-    total: 415,
-    advance_required: 83,
-    advance_paid: true,
-    advance_txn_id: 'UPI-ADV-9918',
-    waiter_id: '2002',
-    items: [
-      { id: 'oi5', menu_id: 'm3', name: 'Chicken Biryani', qty: 1, price: 320, seat_no: 1, seat_label: 'Seat 1 (Host)', status: 'ready', station: 'Grill' },
-      { id: 'oi6', menu_id: 'm5', name: 'Garlic Naan', qty: 1, price: 70, seat_no: 2, seat_label: 'Seat 2 (Guest - No Phone)', status: 'ready', station: 'Tandoor' },
-    ],
-  },
-  {
-    id: 'ORD-8415',
-    session_id: 'sess-9',
-    table_id: 't9',
-    table_number: 'T-09',
-    token: 49,
-    group_id: null,
-    status: 'new',
-    is_rush: false,
-    created_at: new Date(Date.now() - 21 * 60 * 1000).toISOString(),
-    total: 450,
-    advance_required: 90,
-    advance_paid: true,
-    waiter_id: '2004',
-    items: [
-      { id: 'oi7', menu_id: 'm8', name: 'Kadhai Paneer', qty: 1, price: 290, seat_no: 1, seat_label: 'Seat 1', status: 'new', station: 'Grill' },
-      { id: 'oi8', menu_id: 'm9', name: 'Jeera Rice', qty: 1, price: 120, seat_no: 1, seat_label: 'Seat 1', status: 'new', station: 'Grill' },
-    ],
-  },
-];
+export const ORDERS: Order[] = [];
 
-export const REQUESTS: CustomerRequest[] = [
-  { id: 'r1', table_id: 't4', table_number: 'T-04', type: 'water', status: 'pending', created_at: new Date(Date.now() - 4 * 60 * 1000).toISOString(), waiter_id: '2002' },
-  { id: 'r2', table_id: 't2', table_number: 'T-02', type: 'napkin', status: 'accepted', created_at: new Date(Date.now() - 1 * 60 * 1000).toISOString(), waiter_id: '2002' },
-  { id: 'r3', table_id: 't7', table_number: 'T-07', type: 'call_waiter', status: 'pending', created_at: new Date(Date.now() - 2 * 60 * 1000).toISOString(), waiter_id: '2002' },
-];
+export const REQUESTS: CustomerRequest[] = [];
 
-export const GROUPS: Group[] = [
-  { id: 'g77', group_code: 'G-77', table_ids: ['t4', 't7'], primary_table_id: 't4', billing_pref: 'separate', created_at: new Date().toISOString(), waiter_id: '2002' },
-];
+export const GROUPS: Group[] = [];
 
 export const BILLS: Bill[] = [
-  {
-    id: 'b1',
-    session_id: 'sess-4',
-    table_id: 't4',
-    table_number: 'T-04',
-    token: 44,
-    group_id: 'GRP-8812',
-    linked_tables: ['T-04', 'T-05'],
-    subtotal: 1000,
-    cgst: 25,
-    sgst: 25,
-    discount: 0,
-    total: 1050,
-    advance_deducted: 200,
-    paid_amount: 504,
-    balance_due: 346,
-    status: 'pending',
-    counter_checkout_requested: true,
-    counter_cash_lock: false,
-    seats: [
-      {
-        seat: 1,
-        label: 'T-04 · Chair 1 (Host)',
-        original_share: 500,
-        adjusted_share: 600,
-        rebalance_note: '*Custom Rebalanced by Diners (absorbed ₹100 from Chair 2)',
-        advance_credited: 120,
-        pending_amount: 0,
-        paid: true,
-        paid_method: 'online_upi',
-        txn_id: 'UPI-98218-HDF'
-      },
-      {
-        seat: 2,
-        label: 'T-04 · Chair 2: Guest of Host [Senior - No Phone]',
-        original_share: 500,
-        adjusted_share: 400,
-        rebalance_note: '*Chair 1 paid ₹100 of this share',
-        advance_credited: 80,
-        pending_amount: 346,
-        paid: false,
-        paid_method: null
-      }
-    ],
-    created_at: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
-    scan_count: 2,
-  },
-  {
-    id: 'b2',
-    session_id: 'sess-2',
-    table_id: 't2',
-    table_number: 'T-02',
-    token: 42,
-    group_id: null,
-    subtotal: 390,
-    cgst: 9.75,
-    sgst: 9.75,
-    discount: 0,
-    total: 415,
-    advance_deducted: 83,
-    paid_amount: 0,
-    balance_due: 332,
-    status: 'pending',
-    counter_checkout_requested: false,
-    counter_cash_lock: false,
-    seats: [
-      {
-        seat: 1,
-        label: 'Chair 1 (Host)',
-        original_share: 415,
-        adjusted_share: 415,
-        advance_credited: 83,
-        pending_amount: 332,
-        paid: false,
-        paid_method: null
-      }
-    ],
-    created_at: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-    scan_count: 1,
-  },
   {
     id: 'b3',
     session_id: 'sess-old',

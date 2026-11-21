@@ -572,6 +572,16 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, db.tables || []);
   }
 
+  if (pathname.startsWith('/api/tables/') && req.method === 'GET') {
+    const tableId = pathname.replace('/api/tables/', '');
+    const db = readDb();
+    const table = (db.tables || []).find(t => t.id === tableId || t.table_number === tableId || (t.id && t.id.toLowerCase() === tableId.toLowerCase()));
+    if (!table) {
+      return sendJson(res, 404, { error: 'Table not found' });
+    }
+    return sendJson(res, 200, table);
+  }
+
   if (pathname.startsWith('/api/tables/') && (req.method === 'PATCH' || req.method === 'PUT')) {
     const tableId = pathname.replace('/api/tables/', '');
     const body = await parseJsonBody(req);
@@ -1058,8 +1068,8 @@ const server = http.createServer(async (req, res) => {
       id: `ses-${tableId}-${Date.now().toString(36)}`,
       code: `SES-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
       table_id: tableId,
-      group_id: 'GRP-8812',
-      linked_table_id: 'T-05',
+      group_id: null,
+      linked_table_id: null,
       party_size: claimedChairs.length,
       is_host: chairId === 1,
       host_seat: 1,
@@ -1067,7 +1077,7 @@ const server = http.createServer(async (req, res) => {
       seats_count: claimedChairs.length,
       chair_id: chairId,
       claimed_chairs: claimedChairs,
-      group_code: '4812',
+      group_code: "4812",
       language: body.language || 'en',
       status: 'active',
       advance_paid: 0,
@@ -1081,8 +1091,26 @@ const server = http.createServer(async (req, res) => {
     if (table) {
       table.status = 'occupied';
       table.current_session_id = session.id;
-      table.group_id = 'GRP-8812';
-      table.linked_tables = ['T-04', 'T-05'];
+      table.group_id = null;
+      table.linked_tables = [];
+      const totalSeats = table.max_seats || table.capacity || 4;
+      const existingSeats = Array.isArray(table.seats) && table.seats.length > 0 ? table.seats : [];
+      table.seats = Array.from({ length: totalSeats }, (_, idx) => {
+        const sNo = idx + 1;
+        const isMySeat = sNo === chairId;
+        const isClaimedByMe = claimedChairs.includes(sNo);
+        const existing = existingSeats.find(s => s.seat_no === sNo);
+        if (isMySeat) {
+          return { seat_no: sNo, label: sNo === 1 ? 'Chair 1 (Host)' : `Chair ${sNo} (Active Diner)`, phone_active: true };
+        }
+        if (isClaimedByMe) {
+          return { seat_no: sNo, label: `Chair ${sNo}: Guest of Chair ${chairId} [No Phone]`, is_direct_claim: true, claimed_by_seat: chairId, phone_active: false };
+        }
+        if (existing && (existing.phone_active || existing.is_direct_claim)) {
+          return existing;
+        }
+        return { seat_no: sNo, label: `Chair ${sNo}`, phone_active: false };
+      });
     }
 
     db.sessions = db.sessions || [];
@@ -1098,15 +1126,15 @@ const server = http.createServer(async (req, res) => {
       id: sessId,
       code: 'SES-DEMO',
       table_id: 'T-04',
-      group_id: 'GRP-8812',
-      linked_table_id: 'T-05',
-      party_size: 3,
+      group_id: null,
+      linked_table_id: null,
+      party_size: 1,
       is_host: true,
       host_seat: 1,
-      guest_seats: [2, 3],
-      seats_count: 3,
+      guest_seats: [],
+      seats_count: 1,
       chair_id: 1,
-      claimed_chairs: [1, 2, 3],
+      claimed_chairs: [1],
       group_code: '4812',
       language: 'en',
       status: 'active',
@@ -1132,7 +1160,7 @@ const server = http.createServer(async (req, res) => {
       table_id: body.table_id || 'T-04',
       table_number: body.table_id || 'T-04',
       token: Math.floor(10 + Math.random() * 80),
-      group_id: body.group_id || 'GRP-8812',
+      group_id: body.group_id || null,
       status: 'awaiting_advance', // Gate cooking until 20% advance
       is_rush: false,
       items: (body.items || []).map((it, idx) => ({

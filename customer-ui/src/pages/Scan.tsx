@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   ShieldAlert,
   UtensilsCrossed,
@@ -12,7 +12,7 @@ import {
   Sparkles,
   ChevronLeft
 } from "lucide-react";
-import { apiPost } from "@/lib/api";
+import { apiGet, apiPost } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import AmbientBackground from "@/components/AmbientBackground";
 import { makeT } from "@/lib/i18n";
@@ -50,7 +50,39 @@ export default function Scan() {
   const t = useMemo(() => makeT(lang), [lang]);
   const [invalid, setInvalid] = useState<string | null>(null);
 
+  // Live real-time table chair polling from backend
+  const { data: liveTable } = useQuery({
+    queryKey: ["tableLive", tableId],
+    queryFn: () => apiGet<any>(`/tables/${tableId}`).catch(() => null),
+    refetchInterval: 3000,
+  });
+
+  const occupiedSeats = useMemo(() => {
+    if (!liveTable || !Array.isArray(liveTable.seats)) return [];
+    return liveTable.seats.filter((s: any) => s.phone_active || s.is_direct_claim);
+  }, [liveTable]);
+
+  const occupiedSeatNumbers = useMemo(() => {
+    return occupiedSeats.map((s: any) => s.seat_no);
+  }, [occupiedSeats]);
+
+  const hasExistingSession = occupiedSeatNumbers.length > 0;
+
+  // Auto-switch to next available chair if host chair 1 is already taken
+  useEffect(() => {
+    if (hasExistingSession) {
+      setIsSecondPhone(true);
+      const freeChair = [1, 2, 3, 4].find((c) => !occupiedSeatNumbers.includes(c));
+      if (freeChair && (occupiedSeatNumbers.includes(selectedPrimaryChair) || selectedPrimaryChair === 1)) {
+        setSelectedPrimaryChair(freeChair);
+        setClaimedChairs([freeChair]);
+        setUserName(`Diner (Chair ${freeChair})`);
+      }
+    }
+  }, [hasExistingSession, occupiedSeatNumbers]);
+
   const toggleClaimChair = (c: number) => {
+    if (occupiedSeatNumbers.includes(c)) return; // Already occupied by diner/guest
     if (c === selectedPrimaryChair) return; // Cannot unclaim own primary chair
     if (claimedChairs.includes(c)) {
       setClaimedChairs(claimedChairs.filter((x) => x !== c));
@@ -76,8 +108,8 @@ export default function Scan() {
         id: `ses-${tableId}-${Date.now().toString(36)}`,
         code: `SES-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
         table_id: tableId,
-        group_id: "GRP-8812",
-        linked_table_id: "T-05",
+        group_id: null,
+        linked_table_id: null,
         party_size: chairs.length,
         is_host: selectedPrimaryChair === 1,
         host_seat: 1,
@@ -86,10 +118,9 @@ export default function Scan() {
         chair_id: selectedPrimaryChair,
         claimed_chairs: chairs,
         user_name: userName,
-        group_code: "4812",
+        group_code: undefined,
         linked_members: [
           { table_id: tableId, chairs: chairs, name: userName || "Your Table" },
-          { table_id: "T-05", chairs: [1, 2], name: "Rohan & Family (Linked)" },
         ],
         language: lang,
         status: "active",
@@ -282,7 +313,8 @@ export default function Scan() {
                   {/* Chairs Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((c) => {
-                      const isHostOccupied = isSecondPhone && c === 1;
+                      const isOccupiedByOther = occupiedSeatNumbers.includes(c);
+                      const occSeat = (liveTable?.seats || []).find((s: any) => s.seat_no === c);
                       const isMyPrimary = selectedPrimaryChair === c;
                       const isClaimedByMe = claimedChairs.includes(c);
 
@@ -290,9 +322,9 @@ export default function Scan() {
                         <button
                           key={c}
                           type="button"
-                          disabled={isHostOccupied}
+                          disabled={isOccupiedByOther}
                           onClick={() => {
-                            if (isSecondPhone) {
+                            if (hasExistingSession || isSecondPhone) {
                               setSelectedPrimaryChair(c);
                               setClaimedChairs([c]);
                             } else {
@@ -300,8 +332,8 @@ export default function Scan() {
                             }
                           }}
                           className={`relative flex flex-col items-center justify-center rounded-2xl border p-4 text-center transition-all ${
-                            isHostOccupied
-                              ? "border-purple-500/40 bg-purple-500/10 opacity-80 cursor-not-allowed"
+                            isOccupiedByOther
+                              ? "border-purple-500/40 bg-purple-500/10 opacity-75 cursor-not-allowed"
                               : isMyPrimary
                               ? "border-amber-500 bg-amber-500/20 shadow-lg shadow-amber-500/20 scale-[1.02]"
                               : isClaimedByMe
@@ -310,14 +342,14 @@ export default function Scan() {
                           }`}
                         >
                           <span className="text-2xl">
-                            {isHostOccupied ? "👑" : isMyPrimary ? (c === 1 ? "👑" : "👤") : isClaimedByMe ? "👥" : "🪑"}
+                            {isOccupiedByOther ? (c === 1 ? "👑" : "👥") : isMyPrimary ? (c === 1 ? "👑" : "👤") : isClaimedByMe ? "👥" : "🪑"}
                           </span>
                           <span className="mt-2 font-heading text-sm font-bold text-white">
                             Chair {c}
                           </span>
-                          <span className="text-[11px] text-muted-foreground mt-0.5">
-                            {isHostOccupied
-                              ? "Host (Active Session)"
+                          <span className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">
+                            {isOccupiedByOther
+                              ? (occSeat?.label || "Occupied by Diner")
                               : isMyPrimary
                               ? "You (Active Seat)"
                               : isClaimedByMe
@@ -325,9 +357,14 @@ export default function Scan() {
                               : "Tap to Claim"}
                           </span>
 
-                          {isClaimedByMe && !isHostOccupied && (
+                          {isClaimedByMe && !isOccupiedByOther && (
                             <span className="mt-1.5 rounded-full bg-green-500/20 px-2 py-0.5 text-[9px] font-black text-green-300">
                               {isMyPrimary ? "PRIMARY SEAT" : "LINKED GUEST"}
+                            </span>
+                          )}
+                          {isOccupiedByOther && (
+                            <span className="mt-1.5 rounded-full bg-purple-500/20 px-2 py-0.5 text-[9px] font-black text-purple-300">
+                              OCCUPIED
                             </span>
                           )}
                         </button>
@@ -335,15 +372,17 @@ export default function Scan() {
                     })}
                   </div>
 
-                  {/* Group Handshake Prompt when 2nd phone is detected */}
-                  {isSecondPhone && (
+                  {/* Group Handshake Prompt when active table seats are detected */}
+                  {(hasExistingSession || isSecondPhone) && (
                     <div className="mt-5 rounded-2xl border border-purple-500/40 bg-purple-500/10 p-3.5 text-left text-xs text-purple-200">
                       <div className="flex items-center gap-2 font-bold text-white">
                         <Users className="h-4 w-4 text-purple-400" />
-                        <span>Host is already seated at Chair 1!</span>
+                        <span>Active Diners already seated at Table {tableId}!</span>
                       </div>
                       <p className="mt-1 text-[11px] text-purple-300/80">
-                        Joining this table group connects your live cart and menu. You can order for your seat or collaborate with Chair 1.
+                        {occupiedSeatNumbers.length > 0
+                          ? `Chairs ${occupiedSeatNumbers.join(', ')} are currently claimed. You are joining Chair ${selectedPrimaryChair} with your own distinct diner session.`
+                          : "Joining this table group connects your live cart and menu. You can order for your seat or collaborate with Host."}
                       </p>
                     </div>
                   )}

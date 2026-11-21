@@ -227,10 +227,18 @@ export default function Menu() {
                         </div>
                         <p className="mt-0.5 text-xs text-purple-200/80">
                           <span className="font-bold text-white">Table {session.table_id}</span>
-                          <span className="mx-1.5 text-purple-400">⇄</span>
-                          <span className="font-bold text-purple-200">Table {session.linked_table_id || "T-05"}</span>
-                          <span className="mx-1.5 text-white/30">•</span>
-                          <span>Group <strong className="font-mono text-purple-200">#{session.group_id || "GRP-8812"}</strong></span>
+                          {session.linked_table_id ? (
+                            <>
+                              <span className="mx-1.5 text-purple-400">⇄</span>
+                              <span className="font-bold text-purple-200">Table {session.linked_table_id}</span>
+                            </>
+                          ) : null}
+                          {session.group_id ? (
+                            <>
+                              <span className="mx-1.5 text-white/30">•</span>
+                              <span>Group <strong className="font-mono text-purple-200">#{session.group_id}</strong></span>
+                            </>
+                          ) : null}
                         </p>
                       </div>
                     </div>

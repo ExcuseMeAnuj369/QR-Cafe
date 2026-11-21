@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useApp } from '../../hooks/useApp';
 import { cn } from '../../utils/cn';
@@ -114,9 +115,9 @@ export function Attendance() {
           <div className={cn(
             'px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase flex items-center gap-2 border',
             isCheckedIn ? 'bg-green-500/15 text-green-400 border-green-500/30' :
-            isCheckedOut ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' :
-            isOnLeave ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' :
-            isAbsent ? 'bg-red-500/15 text-red-400 border-red-500/30' : 'bg-surface2 text-muted border-line'
+              isCheckedOut ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' :
+                isOnLeave ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' :
+                  isAbsent ? 'bg-red-500/15 text-red-400 border-red-500/30' : 'bg-surface2 text-muted border-line'
           )}>
             <span className={cn('w-2 h-2 rounded-full', isCheckedIn ? 'bg-green-500 animate-pulse' : isOnLeave ? 'bg-blue-500' : isCheckedOut ? 'bg-amber-500' : isAbsent ? 'bg-red-500' : 'bg-gray-500')} />
             {isCheckedOut ? 'Shift Ended' : isCheckedIn ? 'On Duty (Present)' : isOnLeave ? 'Approved Leave' : isAbsent ? 'Absent' : 'Pending Floor Check-In'}
@@ -240,10 +241,10 @@ export function Attendance() {
               </div>
               <div className="text-[9px] font-bold uppercase truncate max-w-full">
                 {d.status === 'present' ? (d.checkIn || 'Present') :
-                 d.status === 'leave' ? 'On Leave' :
-                 d.status === 'late' ? 'Late' :
-                 d.status === 'absent' ? 'Absent' :
-                 d.status === 'weekend' ? 'Off' : ''}
+                  d.status === 'leave' ? 'On Leave' :
+                    d.status === 'late' ? 'Late' :
+                      d.status === 'absent' ? 'Absent' :
+                        d.status === 'weekend' ? 'Off' : ''}
               </div>
             </div>
           ))}

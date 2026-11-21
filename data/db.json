@@ -199,347 +199,8 @@
       "zone": "C"
     }
   ],
-  "orders": [
-    {
-      "id": "ORD-8425",
-      "session_id": "sess-t7",
-      "table_id": "T-04",
-      "table_number": "T-04",
-      "token": 47,
-      "group_id": "GRP-8812",
-      "status": "awaiting_advance",
-      "is_rush": false,
-      "created_at": "2026-10-24T12:40:00.000Z",
-      "total": 380,
-      "waiter_id": "2002",
-      "waiter_name": "Priya Sharma",
-      "items": [
-        {
-          "id": "i1",
-          "name": "Chicken Biryani",
-          "qty": 1,
-          "price": 320,
-          "seat_no": 1,
-          "seat_label": "Seat 1 (Host)",
-          "status": "awaiting_advance",
-          "station": "Grill"
-        },
-        {
-          "id": "i2",
-          "name": "Butter Naan",
-          "qty": 1,
-          "price": 60,
-          "seat_no": 2,
-          "seat_label": "Seat 2 (Guest - No Phone)",
-          "status": "awaiting_advance",
-          "station": "Tandoor"
-        }
-      ],
-      "advance_required": 76,
-      "advance_paid": false
-    },
-    {
-      "id": "ORD-8422",
-      "session_id": "sess-t7",
-      "table_id": "T-07",
-      "table_number": "T-07",
-      "token": 47,
-      "group_id": null,
-      "status": "new",
-      "is_rush": false,
-      "created_at": "2026-10-24T12:35:00.000Z",
-      "total": 800,
-      "waiter_id": "2002",
-      "waiter_name": "Priya Sharma",
-      "items": [
-        {
-          "id": "oi3",
-          "menu_id": "m4",
-          "name": "Veg Biryani",
-          "qty": 2,
-          "price": 260,
-          "status": "new",
-          "station": "Grill"
-        },
-        {
-          "id": "oi4",
-          "menu_id": "m6",
-          "name": "Mango Lassi",
-          "qty": 2,
-          "price": 90,
-          "status": "new",
-          "station": "Bar"
-        }
-      ]
-    },
-    {
-      "id": "ORD-8421",
-      "session_id": "sess-t4",
-      "table_id": "T-04",
-      "table_number": "T-04",
-      "token": 44,
-      "group_id": "GRP-8812",
-      "status": "preparing",
-      "is_rush": true,
-      "created_at": "2026-10-23T20:58:00.000Z",
-      "total": 400,
-      "waiter_id": "2002",
-      "waiter_name": "Priya Sharma",
-      "items": [
-        {
-          "id": "i3",
-          "name": "Butter Chicken (Medium Spicy)",
-          "qty": 1,
-          "price": 280,
-          "seat_no": 1,
-          "seat_label": "Seat 1 (Host)",
-          "status": "preparing",
-          "station": "Grill"
-        },
-        {
-          "id": "i4",
-          "name": "Garlic Naan",
-          "qty": 2,
-          "price": 60,
-          "seat_no": 2,
-          "seat_label": "Seat 2 (Guest - No Phone)",
-          "status": "preparing",
-          "station": "Tandoor"
-        }
-      ],
-      "advance_paid": true,
-      "advance_required": 80
-    },
-    {
-      "id": "ORD-8418",
-      "session_id": "sess-t2",
-      "table_id": "T-02",
-      "table_number": "T-02",
-      "token": 42,
-      "group_id": null,
-      "status": "served",
-      "is_rush": false,
-      "created_at": "2026-10-23T20:48:00.000Z",
-      "total": 415,
-      "waiter_id": "2002",
-      "waiter_name": "Priya Sharma",
-      "items": [
-        {
-          "id": "oi5",
-          "menu_id": "m3",
-          "name": "Chicken Biryani",
-          "qty": 1,
-          "price": 320,
-          "status": "served",
-          "station": "Grill"
-        },
-        {
-          "id": "oi6",
-          "menu_id": "m5",
-          "name": "Garlic Naan",
-          "qty": 1,
-          "price": 70,
-          "status": "served",
-          "station": "Tandoor"
-        }
-      ]
-    },
-    {
-      "id": "ORD-8415",
-      "session_id": "sess-t9",
-      "table_id": "T-09",
-      "table_number": "T-09",
-      "token": 49,
-      "group_id": null,
-      "status": "preparing",
-      "is_rush": false,
-      "created_at": "2026-10-23T20:52:00.000Z",
-      "total": 450,
-      "waiter_id": "2004",
-      "waiter_name": "Sneha Patel",
-      "items": [
-        {
-          "id": "oi7",
-          "menu_id": "m8",
-          "name": "Kadhai Paneer",
-          "qty": 1,
-          "price": 290,
-          "status": "preparing",
-          "station": "Grill"
-        },
-        {
-          "id": "oi8",
-          "menu_id": "m9",
-          "name": "Jeera Rice",
-          "qty": 1,
-          "price": 120,
-          "status": "preparing",
-          "station": "Grill"
-        }
-      ]
-    },
-    {
-      "id": "ORD-8410",
-      "session_id": "sess-t1",
-      "table_id": "T-01",
-      "table_number": "T-01",
-      "token": 41,
-      "group_id": null,
-      "status": "preparing",
-      "is_rush": false,
-      "created_at": "2026-10-23T20:42:00.000Z",
-      "total": 850,
-      "waiter_id": "2002",
-      "waiter_name": "Priya Sharma",
-      "items": [
-        {
-          "id": "oi9",
-          "menu_id": "m1",
-          "name": "Paneer Butter Masala",
-          "qty": 1,
-          "price": 280,
-          "status": "preparing",
-          "station": "Grill"
-        },
-        {
-          "id": "oi10",
-          "menu_id": "m5",
-          "name": "Garlic Naan",
-          "qty": 2,
-          "price": 70,
-          "status": "preparing",
-          "station": "Tandoor"
-        }
-      ]
-    },
-    {
-      "id": "ORD-8416",
-      "session_id": "sess-t6",
-      "table_id": "T-06",
-      "table_number": "T-06",
-      "token": 46,
-      "group_id": null,
-      "status": "preparing",
-      "is_rush": false,
-      "created_at": "2026-10-23T20:50:00.000Z",
-      "total": 2890,
-      "waiter_id": "2004",
-      "waiter_name": "Sneha Patel",
-      "items": [
-        {
-          "id": "oi11",
-          "menu_id": "m10",
-          "name": "Butter Chicken",
-          "qty": 2,
-          "price": 320,
-          "status": "preparing",
-          "station": "Grill"
-        },
-        {
-          "id": "oi12",
-          "menu_id": "m11",
-          "name": "Dal Makhani",
-          "qty": 1,
-          "price": 250,
-          "status": "preparing",
-          "station": "Grill"
-        }
-      ]
-    }
-  ],
-  "requests": [
-    {
-      "id": "rf-1",
-      "table_id": "T-04",
-      "table_number": "T-04",
-      "type": "Food Re-Order (Round 2)",
-      "status": "pending",
-      "created_at": "2026-10-24T12:42:00.000Z",
-      "waiter_id": "2002",
-      "waiter": "Priya Sharma",
-      "is_food": true,
-      "food_items": [
-        {
-          "menu_id": "m2",
-          "name": "Butter Naan",
-          "qty": 2,
-          "price": 60,
-          "station": "Tandoor"
-        },
-        {
-          "menu_id": "m7",
-          "name": "Dal Makhani",
-          "qty": 1,
-          "price": 250,
-          "station": "Grill"
-        }
-      ],
-      "total": 370,
-      "notes": "Mid-Meal Add-on from QR-Cafe"
-    },
-    {
-      "id": "rf-2",
-      "table_id": "T-06",
-      "table_number": "T-06",
-      "type": "Food Re-Order (Dessert)",
-      "status": "pending",
-      "created_at": "2026-10-24T12:43:00.000Z",
-      "waiter_id": "2004",
-      "waiter": "Sneha Patel",
-      "is_food": true,
-      "food_items": [
-        {
-          "menu_id": "m10",
-          "name": "Gulab Jamun (2pc)",
-          "qty": 2,
-          "price": 80,
-          "station": "Dessert"
-        },
-        {
-          "menu_id": "m12",
-          "name": "Masala Chai",
-          "qty": 2,
-          "price": 40,
-          "station": "Bar"
-        }
-      ],
-      "total": 240,
-      "notes": "Dessert round requested"
-    },
-    {
-      "id": "r1",
-      "table_id": "T-04",
-      "table_number": "T-04",
-      "type": "Requested Drinking Water",
-      "status": "pending",
-      "created_at": "2026-10-24T12:38:00.000Z",
-      "waiter_id": "2002",
-      "waiter": "Priya Sharma",
-      "is_food": false
-    },
-    {
-      "id": "r2",
-      "table_id": "T-02",
-      "table_number": "T-02",
-      "type": "Extra Cutlery & Napkins",
-      "status": "accepted",
-      "created_at": "2026-10-24T12:36:00.000Z",
-      "waiter_id": "2002",
-      "waiter": "Priya Sharma",
-      "is_food": false
-    },
-    {
-      "id": "r3",
-      "table_id": "T-07",
-      "table_number": "T-07",
-      "type": "Bill Requested",
-      "status": "pending",
-      "created_at": "2026-10-24T12:41:00.000Z",
-      "waiter_id": "2002",
-      "waiter": "Priya Sharma",
-      "is_food": false
-    }
-  ],
+  "orders": [],
+  "requests": [],
   "tables": [
     {
       "id": "T-01",
@@ -551,14 +212,37 @@
       "assigned_waiter_id": null,
       "assigned_waiter_name": null,
       "waiter": "—",
-      "waiter_id": "2002",
+      "waiter_id": null,
       "current_session_id": null,
       "current_token": 42,
-      "timeSeated": "42 min ago",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-02",
@@ -570,14 +254,27 @@
       "assigned_waiter_id": null,
       "assigned_waiter_name": null,
       "waiter": "—",
-      "waiter_id": "2002",
+      "waiter_id": null,
       "current_session_id": null,
       "current_token": 43,
-      "timeSeated": "55 min ago",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-03",
@@ -592,11 +289,44 @@
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 31,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        },
+        {
+          "seat_no": 5,
+          "label": "Chair 5",
+          "phone_active": false
+        },
+        {
+          "seat_no": 6,
+          "label": "Chair 6",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-04",
@@ -604,43 +334,38 @@
       "max_seats": 4,
       "capacity": 4,
       "zone": "B",
-      "status": "occupied",
+      "status": "free",
       "assigned_waiter_id": null,
       "assigned_waiter_name": null,
       "waiter": "—",
-      "waiter_id": "2002",
+      "waiter_id": null,
       "current_session_id": null,
       "current_token": 45,
-      "timeSeated": "28 min ago",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
-      "group_id": "GRP-8812",
+      "group_id": null,
       "orderItems": [],
-      "linked_tables": [
-        "T-04",
-        "T-05"
-      ],
+      "linked_tables": [],
       "seats": [
         {
           "seat_no": 1,
-          "label": "Chair 1: Host",
-          "phone_active": true
+          "label": "Chair 1",
+          "phone_active": false
         },
         {
           "seat_no": 2,
-          "label": "Chair 2: Guest of Host [Senior - No Phone]",
-          "is_direct_claim": true,
-          "claimed_by_seat": 1,
+          "label": "Chair 2",
           "phone_active": false
         },
         {
           "seat_no": 3,
-          "label": "Chair 3: Diner",
-          "phone_active": true
+          "label": "Chair 3",
+          "phone_active": false
         },
         {
           "seat_no": 4,
-          "label": "Chair 4: Empty",
+          "label": "Chair 4",
           "phone_active": false
         }
       ]
@@ -651,21 +376,40 @@
       "max_seats": 4,
       "capacity": 4,
       "zone": "B",
-      "status": "occupied",
+      "status": "free",
       "assigned_waiter_id": null,
       "assigned_waiter_name": null,
       "waiter": "—",
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 35,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
-      "group_id": "GRP-8812",
+      "group_id": null,
       "orderItems": [],
-      "linked_tables": [
-        "T-04",
-        "T-05"
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        }
       ]
     },
     {
@@ -674,20 +418,60 @@
       "max_seats": 8,
       "capacity": 8,
       "zone": "B",
-      "status": "occupied",
-      "assigned_waiter_id": "2004",
-      "assigned_waiter_name": "Sneha Patel",
-      "waiter": "Sneha Patel",
-      "waiter_id": "2004",
-      "current_session_id": "sess-t6",
+      "status": "free",
+      "assigned_waiter_id": null,
+      "assigned_waiter_name": null,
+      "waiter": "—",
+      "waiter_id": null,
+      "current_session_id": null,
       "current_token": 46,
-      "timeSeated": "1 hr ago",
-      "covers": 7,
-      "billAmount": 2890,
+      "timeSeated": null,
+      "covers": 0,
+      "billAmount": 0,
       "group_id": null,
-      "orderItems": [
-        "Butter Chicken x2",
-        "Dal Makhani"
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        },
+        {
+          "seat_no": 5,
+          "label": "Chair 5",
+          "phone_active": false
+        },
+        {
+          "seat_no": 6,
+          "label": "Chair 6",
+          "phone_active": false
+        },
+        {
+          "seat_no": 7,
+          "label": "Chair 7",
+          "phone_active": false
+        },
+        {
+          "seat_no": 8,
+          "label": "Chair 8",
+          "phone_active": false
+        }
       ]
     },
     {
@@ -700,14 +484,37 @@
       "assigned_waiter_id": null,
       "assigned_waiter_name": null,
       "waiter": "—",
-      "waiter_id": "2002",
+      "waiter_id": null,
       "current_session_id": null,
       "current_token": 48,
-      "timeSeated": "15 min ago",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-08",
@@ -722,11 +529,34 @@
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 28,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-09",
@@ -734,20 +564,50 @@
       "max_seats": 6,
       "capacity": 6,
       "zone": "C",
-      "status": "occupied",
-      "assigned_waiter_id": "2004",
-      "assigned_waiter_name": "Sneha Patel",
-      "waiter": "Sneha Patel",
-      "waiter_id": "2004",
-      "current_session_id": "sess-t9",
+      "status": "free",
+      "assigned_waiter_id": null,
+      "assigned_waiter_name": null,
+      "waiter": "—",
+      "waiter_id": null,
+      "current_session_id": null,
       "current_token": 49,
-      "timeSeated": "35 min ago",
-      "covers": 5,
-      "billAmount": 1950,
+      "timeSeated": null,
+      "covers": 0,
+      "billAmount": 0,
       "group_id": null,
-      "orderItems": [
-        "Kadhai Paneer",
-        "Jeera Rice"
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        },
+        {
+          "seat_no": 5,
+          "label": "Chair 5",
+          "phone_active": false
+        },
+        {
+          "seat_no": 6,
+          "label": "Chair 6",
+          "phone_active": false
+        }
       ]
     },
     {
@@ -763,11 +623,34 @@
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 20,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-11",
@@ -782,11 +665,24 @@
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 15,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        }
+      ]
     },
     {
       "id": "T-12",
@@ -801,11 +697,44 @@
       "waiter_id": null,
       "current_session_id": null,
       "current_token": 12,
-      "timeSeated": "—",
+      "timeSeated": null,
       "covers": 0,
       "billAmount": 0,
       "group_id": null,
-      "orderItems": []
+      "orderItems": [],
+      "linked_tables": [],
+      "seats": [
+        {
+          "seat_no": 1,
+          "label": "Chair 1",
+          "phone_active": false
+        },
+        {
+          "seat_no": 2,
+          "label": "Chair 2",
+          "phone_active": false
+        },
+        {
+          "seat_no": 3,
+          "label": "Chair 3",
+          "phone_active": false
+        },
+        {
+          "seat_no": 4,
+          "label": "Chair 4",
+          "phone_active": false
+        },
+        {
+          "seat_no": 5,
+          "label": "Chair 5",
+          "phone_active": false
+        },
+        {
+          "seat_no": 6,
+          "label": "Chair 6",
+          "phone_active": false
+        }
+      ]
     }
   ],
   "attendance": [
@@ -957,89 +886,6 @@
     "actualDrawerCash": 12380
   },
   "bills": [
-    {
-      "id": "b-9901",
-      "session_id": "sess-t4",
-      "table_id": "T-04",
-      "table_number": "T-04",
-      "token": 44,
-      "group_id": "GRP-8812",
-      "linked_tables": [
-        "T-04",
-        "T-05"
-      ],
-      "subtotal": 1000,
-      "cgst": 25,
-      "sgst": 25,
-      "discount": 0,
-      "total": 1050,
-      "advance_deducted": 200,
-      "paid_amount": 504,
-      "balance_due": 346,
-      "status": "pending",
-      "counter_checkout_requested": true,
-      "counter_cash_lock": false,
-      "seats": [
-        {
-          "seat": 1,
-          "label": "T-04 · Chair 1 (Host)",
-          "original_share": 500,
-          "adjusted_share": 600,
-          "rebalance_note": "*Custom Rebalanced by Diners (absorbed ₹100 from Chair 2)",
-          "advance_credited": 120,
-          "pending_amount": 0,
-          "paid": true,
-          "paid_method": "online_upi",
-          "txn_id": "UPI-98218-HDF"
-        },
-        {
-          "seat": 2,
-          "label": "T-04 · Chair 2: Guest of Host [Senior - No Phone]",
-          "original_share": 500,
-          "adjusted_share": 400,
-          "rebalance_note": "*Chair 1 paid ₹100 of this share",
-          "advance_credited": 80,
-          "pending_amount": 346,
-          "paid": false,
-          "paid_method": null
-        }
-      ],
-      "created_at": "2026-11-21T06:27:16.554Z",
-      "scan_count": 2
-    },
-    {
-      "id": "b-9902",
-      "session_id": "sess-t2",
-      "table_id": "T-02",
-      "table_number": "T-02",
-      "token": 42,
-      "group_id": null,
-      "subtotal": 415,
-      "cgst": 10.38,
-      "sgst": 10.38,
-      "discount": 0,
-      "total": 435,
-      "advance_deducted": 85,
-      "paid_amount": 0,
-      "balance_due": 350,
-      "status": "pending",
-      "counter_checkout_requested": false,
-      "counter_cash_lock": false,
-      "seats": [
-        {
-          "seat": 1,
-          "label": "T-02 · Chair 1 (Host)",
-          "original_share": 435,
-          "adjusted_share": 435,
-          "advance_credited": 85,
-          "pending_amount": 350,
-          "paid": false,
-          "paid_method": null
-        }
-      ],
-      "created_at": "2026-11-21T06:17:16.556Z",
-      "scan_count": 1
-    },
     {
       "id": "b-1048",
       "table_id": "T-02",
@@ -1338,5 +1184,6 @@
       "status": "Pending",
       "limitRequired": "Manager"
     }
-  ]
+  ],
+  "sessions": []
 }
