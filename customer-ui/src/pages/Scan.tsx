@@ -374,15 +374,15 @@ export default function Scan() {
 
                   {/* Group Handshake Prompt when active table seats are detected */}
                   {(hasExistingSession || isSecondPhone) && (
-                    <div className="mt-5 rounded-2xl border border-purple-500/40 bg-purple-500/10 p-3.5 text-left text-xs text-purple-200">
+                    <div className="mt-5 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-left text-xs text-amber-200">
                       <div className="flex items-center gap-2 font-bold text-white">
-                        <Users className="h-4 w-4 text-purple-400" />
-                        <span>Active Diners already seated at Table {tableId}!</span>
+                        <Users className="h-4 w-4 text-amber-400" />
+                        <span>Table {tableId} is in use by an active dining party</span>
                       </div>
-                      <p className="mt-1 text-[11px] text-purple-300/80">
-                        {occupiedSeatNumbers.length > 0
-                          ? `Chairs ${occupiedSeatNumbers.join(', ')} are currently claimed. You are joining Chair ${selectedPrimaryChair} with your own distinct diner session.`
-                          : "Joining this table group connects your live cart and menu. You can order for your seat or collaborate with Host."}
+                      <p className="mt-1 text-[11px] text-amber-300/80">
+                        {occupiedSeatNumbers.length >= 4
+                          ? "All chairs at this table are currently occupied. Please choose another table."
+                          : `Chairs ${occupiedSeatNumbers.join(', ')} are claimed. If you are dining with this party, you can claim your chair below. Each diner pays only for their own seat.`}
                       </p>
                     </div>
                   )}

@@ -245,6 +245,18 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, db.orders || []);
   }
 
+  if (pathname.startsWith('/api/orders/') && req.method === 'GET') {
+    const queryId = pathname.replace('/api/orders/', '');
+    const db = readDb();
+    const orders = (db.orders || []).filter(o =>
+      o.session_id === queryId ||
+      o.table_id === queryId ||
+      o.table_number === queryId ||
+      o.id === queryId
+    );
+    return sendJson(res, 200, orders);
+  }
+
   if (pathname === '/api/orders' && req.method === 'POST') {
     const body = await parseJsonBody(req);
     const db = readDb();
@@ -1151,50 +1163,200 @@ const server = http.createServer(async (req, res) => {
     db.orders = db.orders || [];
 
     const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
-    const advanceRequired = body.advance_required || Math.round((body.subtotal || 400) * 0.2);
+    const sess = (db.sessions || []).find(s => s.id === body.session_id);
+    const tableId = sess ? sess.table_id : (body.table_id || 'T-04');
+
+    const calculatedTotal = (body.items || []).reduce((sum, it) => sum + ((Number(it.price) || 200) * (Number(it.qty) || 1)), 0);
+    const orderTotal = body.subtotal ? (body.subtotal > 1000 ? Math.round(body.subtotal / 100) : body.subtotal) : calculatedTotal;
+    const advanceRequired = body.advance_required ? (body.advance_required > 1000 ? Math.round(body.advance_required / 100) : body.advance_required) : Math.round(orderTotal * 0.2);
+    const isAdvPaid = !!(body.advance_paid || body.advance_payment_id);
 
     const newOrder = {
       id: orderId,
       kot_number: `KOT-${(db.orders.length + 1).toString().padStart(2, '0')}`,
-      session_id: body.session_id || 'ses-t4',
-      table_id: body.table_id || 'T-04',
-      table_number: body.table_id || 'T-04',
+      session_id: body.session_id || `ses-${tableId}-${Date.now().toString(36)}`,
+      table_id: tableId,
+      table_number: tableId,
       token: Math.floor(10 + Math.random() * 80),
-      group_id: body.group_id || null,
-      status: 'awaiting_advance', // Gate cooking until 20% advance
+      group_id: sess?.group_id || body.group_id || null,
+      status: isAdvPaid ? 'preparing' : 'awaiting_advance',
       is_rush: false,
       items: (body.items || []).map((it, idx) => ({
         id: `oi-${Date.now()}-${idx}`,
         menu_id: it.item_id || 'm1',
         name: typeof it.name === 'object' ? it.name.en : (it.name || 'Delicious Dish'),
-        qty: it.qty || 1,
-        price: it.price || 200,
-        seat_no: it.seat || 1,
-        seat_label: it.seat === 1 ? 'Seat 1 (Host)' : `Seat ${it.seat || 1} (Guest - No Phone)`,
+        qty: Number(it.qty) || 1,
+        price: Number(it.price) || 200,
+        seat_no: Number(it.seat || 1),
+        seat_label: Number(it.seat) === 1 ? 'Seat 1 (Host)' : `Seat ${it.seat || 1} (Guest - No Phone)`,
         spice_level: it.spice === 'hot' ? 3 : 1,
-        status: 'awaiting_advance',
+        status: isAdvPaid ? 'preparing' : 'awaiting_advance',
         station: 'Grill'
       })),
-      total: body.subtotal || 400,
+      total: orderTotal,
       advance_required: advanceRequired,
-      advance_paid: false,
+      advance_paid: isAdvPaid,
       created_at: new Date().toISOString()
     };
 
     db.orders.unshift(newOrder);
+
+    // Update table in db
+    db.tables = db.tables || [];
+    const table = db.tables.find(t => t.id === tableId || t.table_number === tableId);
+    if (table) {
+      table.status = 'occupied';
+      table.billAmount = (table.billAmount || 0) + orderTotal;
+      table.orderItems = table.orderItems || [];
+      table.orderItems.push(...newOrder.items);
+    }
+
+    // Update or create bill in db
+    db.bills = db.bills || [];
+    let bill = db.bills.find(b => b.session_id === body.session_id || b.table_id === tableId);
+    if (!bill) {
+      bill = {
+        id: `b-${Date.now()}`,
+        session_id: body.session_id,
+        table_id: tableId,
+        group_id: sess?.group_id || null,
+        subtotal: orderTotal,
+        total: Math.round(orderTotal * 1.05),
+        advance_deducted: isAdvPaid ? advanceRequired : 0,
+        paid_amount: isAdvPaid ? advanceRequired : 0,
+        balance_due: Math.round(orderTotal * 1.05) - (isAdvPaid ? advanceRequired : 0),
+        status: 'pending',
+        created_at: new Date().toISOString()
+      };
+      db.bills.push(bill);
+    } else {
+      bill.subtotal = (bill.subtotal || 0) + orderTotal;
+      bill.total = Math.round(bill.subtotal * 1.05);
+      if (isAdvPaid) {
+        bill.advance_deducted = (bill.advance_deducted || 0) + advanceRequired;
+        bill.paid_amount = (bill.paid_amount || 0) + advanceRequired;
+      }
+      bill.balance_due = Math.max(0, bill.total - (bill.paid_amount || 0));
+    }
+
     writeDb(db);
     return sendJson(res, 201, newOrder);
+  }
+
+  // GET /api/service-requests/:sessionId
+  if (pathname.startsWith('/api/service-requests/') && req.method === 'GET') {
+    const sessId = pathname.replace('/api/service-requests/', '');
+    const db = readDb();
+    const reqs = (db.requests || []).filter(r => r.session_id === sessId || r.table_id === sessId);
+    return sendJson(res, 200, reqs);
+  }
+
+  // POST /api/service-request
+  if (pathname === '/api/service-request' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    db.requests = db.requests || [];
+    const sess = (db.sessions || []).find(s => s.id === body.session_id);
+    const newReq = {
+      id: `req-${Date.now()}`,
+      session_id: body.session_id,
+      table_id: sess?.table_id || body.table_id || 'T-04',
+      type: body.type || 'water',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      eta_seconds: 180
+    };
+    db.requests.unshift(newReq);
+    writeDb(db);
+    return sendJson(res, 201, newReq);
   }
 
   if (pathname.startsWith('/api/bill/') && req.method === 'GET') {
     const sessId = pathname.replace('/api/bill/', '');
     const db = readDb();
     const existing = (db.bills || []).find(b => b.session_id === sessId || b.id === sessId);
-    if (existing) {
-      return sendJson(res, 200, existing);
-    }
-    const sampleBill = (db.bills || [])[0] || {};
-    return sendJson(res, 200, sampleBill);
+    const sess = (db.sessions || []).find(s => s.id === sessId);
+    const tableId = sess ? sess.table_id : (existing ? existing.table_id : 'T-04');
+
+    const sessionOrders = (db.orders || []).filter(o => o.session_id === sessId || o.table_id === tableId);
+
+    let subtotalPaise = 0;
+    const lines = [];
+    const seatTotals = {};
+
+    sessionOrders.forEach(o => {
+      (o.items || []).forEach(it => {
+        const itemPricePaise = Math.round((Number(it.price) || 100) * 100);
+        const qty = Number(it.qty) || 1;
+        const lineTotalPaise = itemPricePaise * qty;
+        subtotalPaise += lineTotalPaise;
+        const sNo = Number(it.seat_no || it.seat || 1);
+        lines.push({
+          kot_number: o.kot_number || 'KOT-01',
+          table_id: tableId,
+          item_id: it.menu_id || it.id || 'item-1',
+          name: typeof it.name === 'object' ? it.name : { en: String(it.name || 'Dish'), hi: String(it.name || 'Dish'), mr: String(it.name || 'Dish') },
+          qty,
+          price: itemPricePaise,
+          line_total: lineTotalPaise,
+          seat: sNo,
+          spice: it.spice_level ? (it.spice_level > 2 ? 'hot' : 'medium') : null,
+          addons: Array.isArray(it.addons) ? it.addons : [],
+          notes: it.notes || null
+        });
+        seatTotals[sNo] = (seatTotals[sNo] || 0) + lineTotalPaise;
+      });
+    });
+
+    const cgst = Math.round(subtotalPaise * 0.025);
+    const sgst = Math.round(subtotalPaise * 0.025);
+    const grandTotal = subtotalPaise + cgst + sgst;
+    const advanceDeducted = sessionOrders.reduce((sum, o) => {
+      return sum + (o.advance_paid ? Math.round((o.advance_required || o.total * 0.2) * 100) : 0);
+    }, 0);
+    const balance = Math.max(0, grandTotal - advanceDeducted);
+
+    const seatLines = Object.keys(seatTotals).map(s => {
+      const sNo = Number(s);
+      const sSub = seatTotals[sNo];
+      const sGst = Math.round(sSub * 0.05);
+      const sTotal = sSub + sGst;
+      return {
+        seat: sNo,
+        label: sNo === 1 ? 'Seat 1 (Host - Me)' : `Seat ${sNo} (Guest)`,
+        subtotal: sSub,
+        gst: sGst,
+        total: sTotal,
+        paid_amount: 0,
+        pending_amount: sTotal,
+        paid: false
+      };
+    });
+
+    const billObj = {
+      session_id: sessId,
+      table_id: tableId,
+      group_id: sess?.group_id || null,
+      linked_table_id: sess?.linked_table_id || null,
+      lines,
+      subtotal: subtotalPaise,
+      cgst,
+      sgst,
+      grand_total: grandTotal,
+      advance_deducted: advanceDeducted,
+      paid_amount: 0,
+      balance,
+      status: balance === 0 && grandTotal > 0 ? 'paid' : 'unpaid',
+      checkout_enabled: true,
+      meal_status: 'dining',
+      seats: seatLines.length > 0 ? seatLines : [
+        { seat: 1, label: 'Seat 1 (Host - Me)', subtotal: 0, gst: 0, total: 0, paid_amount: 0, pending_amount: 0, paid: true }
+      ],
+      equal: null,
+      receipt: null
+    };
+
+    return sendJson(res, 200, billObj);
   }
 
   if (pathname === '/api/split-payment' && req.method === 'POST') {
