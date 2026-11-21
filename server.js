@@ -287,6 +287,82 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 201, { success: true, order: newOrder });
   }
 
+  // POST /api/orders/:id/confirm-advance — Confirm 20% advance payment via UPI
+  if (pathname.includes('/confirm-advance') && req.method === 'POST') {
+    const orderId = pathname.replace('/api/orders/', '').replace('/confirm-advance', '');
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    const order = (db.orders || []).find(o => o.id === orderId);
+    if (!order) {
+      return sendJson(res, 404, { error: 'Order not found' });
+    }
+
+    order.advance_paid = true;
+    order.advance_txn_id = body.txn_id || `UPI-ADV-${Date.now().toString().slice(-6)}`;
+    order.status = 'new'; // Move from awaiting_advance to kitchen cooking queue
+    if (order.items) {
+      order.items.forEach(i => { i.status = 'new'; });
+    }
+
+    // Add to financial advance deposits
+    db.financials = db.financials || { todayRevenue: 0, collections: { upi: 0, cash: 0, card: 0 } };
+    db.financials.collections = db.financials.collections || { upi: 0, cash: 0, card: 0 };
+    db.financials.collections.upi = (db.financials.collections.upi || 0) + (order.advance_required || Math.round(order.total * 0.2));
+
+    writeDb(db);
+    return sendJson(res, 200, { success: true, message: '20% Advance confirmed. KOT dispatched to Kitchen.', order });
+  }
+
+  // POST /api/tables/group — 1-click table grouping
+  if (pathname === '/api/tables/group' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    db.tables = db.tables || [];
+    const tableIds = body.table_ids || [];
+    const groupId = body.group_id || `GRP-${Date.now().toString().slice(-4)}`;
+
+    tableIds.forEach(tid => {
+      const t = db.tables.find(x => x.id === tid || x.table_number === tid);
+      if (t) {
+        t.group_id = groupId;
+        t.linked_tables = tableIds;
+        t.status = 'occupied';
+      }
+    });
+
+    writeDb(db);
+    return sendJson(res, 200, { success: true, group_id: groupId, linked_tables: tableIds });
+  }
+
+  // POST /api/tables/claim-guest-seat — Direct claim for seniors & kids without phones
+  if (pathname === '/api/tables/claim-guest-seat' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    db.tables = db.tables || [];
+    const table = db.tables.find(x => x.id === body.table_id || x.table_number === body.table_id);
+    if (!table) {
+      return sendJson(res, 404, { error: 'Table not found' });
+    }
+
+    table.seats = table.seats || [
+      { seat_no: 1, label: 'Chair 1: Host', phone_active: true },
+      { seat_no: 2, label: 'Chair 2', phone_active: false },
+      { seat_no: 3, label: 'Chair 3', phone_active: false },
+      { seat_no: 4, label: 'Chair 4', phone_active: false }
+    ];
+
+    const targetSeat = table.seats.find(s => s.seat_no === Number(body.guest_seat));
+    if (targetSeat) {
+      targetSeat.is_direct_claim = true;
+      targetSeat.claimed_by_seat = Number(body.host_seat || 1);
+      targetSeat.label = `Chair ${body.guest_seat}: Guest of Host [${body.label || 'No Phone Needed'}]`;
+      targetSeat.phone_active = false;
+    }
+
+    writeDb(db);
+    return sendJson(res, 200, { success: true, table });
+  }
+
   if (pathname.startsWith('/api/orders/') && req.method === 'PATCH') {
     const orderId = pathname.replace('/api/orders/', '');
     const body = await parseJsonBody(req);

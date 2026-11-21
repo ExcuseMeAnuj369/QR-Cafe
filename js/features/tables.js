@@ -78,6 +78,14 @@ function renderTables(el) {
                 ${t.status === 'Occupied' || t.status === 'Billing Pending' ? `
                   <div class="text-[11px] text-gray-400">Waiter: <span class="text-white">${t.waiter}</span></div>
                   <div class="text-[11px] text-saffron-400 font-bold">${formatINR(t.billAmount)} (${t.covers} covers)</div>
+                  <!-- Mini Chairs Visual (Green = Mobile, Purple = Senior/Kid Guest Claim, Gray = Empty) -->
+                  <div class="pt-1.5 flex items-center gap-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500" title="Seat 1: Host (Phone)"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-400" title="Seat 2: Guest of Host (No Phone Needed)"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500" title="Seat 3: Diner (Phone)"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-gray-600" title="Seat 4: Available"></span>
+                    <span class="text-[9px] text-purple-300 ml-1 font-bold">1 Direct Claim</span>
+                  </div>
                 ` : `
                   <div class="text-[11px] text-gray-500">Ready for guests</div>
                 `}

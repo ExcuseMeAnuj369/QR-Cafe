@@ -6,6 +6,7 @@ import type { OrderStatus } from '../../types';
 
 const statusFilters: { id: OrderStatus | 'all'; label: string }[] = [
   { id: 'all', label: 'All' },
+  { id: 'awaiting_advance', label: '⏳ Awaiting 20% Advance' },
   { id: 'new', label: 'New' },
   { id: 'preparing', label: 'Preparing' },
   { id: 'ready', label: 'Ready' },
@@ -57,6 +58,7 @@ export function LiveOrders() {
   };
 
   const statusColor = (s: OrderStatus) => {
+    if (s === 'awaiting_advance') return 'bg-amber-500/20 text-amber-400 border-amber-500/40 animate-pulse';
     if (s === 'new') return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
     if (s === 'preparing') return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
     if (s === 'ready') return 'bg-green-500/20 text-green-400 border-green-500/30';
@@ -64,6 +66,7 @@ export function LiveOrders() {
   };
 
   const cardBorder = (s: OrderStatus, rush: boolean) => {
+    if (s === 'awaiting_advance') return 'border-amber-500/50 bg-amber-500/5 opacity-85';
     if (rush) return 'border-red-500/50 bg-red-500/5 pulse-new';
     if (s === 'preparing') return 'border-amber-500/30';
     if (s === 'ready') return 'border-green-500/30';
@@ -218,27 +221,43 @@ export function LiveOrders() {
                 </div>
               )}
 
-              {/* Items List with Per-Item Status */}
+              {/* Items List with Per-Item Status and Chair Tagging */}
+              {order.status === 'awaiting_advance' && (
+                <div className="mb-3 p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between font-bold">
+                  <span>⛔ 20% Advance Pending: ₹{order.advance_required || Math.round(order.total * 0.2)}</span>
+                  <span className="text-[10px] uppercase bg-amber-500/20 px-2 py-0.5 rounded">Do Not Cook</span>
+                </div>
+              )}
+
               <div className="space-y-2 mb-4 bg-surface2/60 rounded-xl p-3 border border-line">
                 {order.items.map(item => (
-                  <div key={item.id} className="flex items-center justify-between text-sm">
+                  <div key={item.id} className="flex items-center justify-between text-sm py-1 border-b border-line/40 last:border-b-0">
                     <div className="flex items-center gap-2 flex-1">
                       <button
                         onClick={() => {
+                          if (order.status === 'awaiting_advance') return;
                           if (item.status === 'new') updateItemStatus(order.id, item.id, 'preparing');
                           else if (item.status === 'preparing') updateItemStatus(order.id, item.id, 'ready');
                         }}
+                        disabled={order.status === 'awaiting_advance'}
                         className={cn(
                           'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors',
                           item.status === 'ready' ? 'border-green-500 bg-green-500/20 text-green-400' :
-                          item.status === 'preparing' ? 'border-amber-500 bg-amber-500/20 text-amber-400' : 'border-line'
+                          item.status === 'preparing' ? 'border-amber-500 bg-amber-500/20 text-amber-400' : 'border-line',
+                          order.status === 'awaiting_advance' && 'opacity-40 cursor-not-allowed'
                         )}
                       >
                         {item.status === 'ready' && <CheckCircle2 size={12} />}
                       </button>
-                      <span className={cn('flex-1 font-medium', item.status === 'ready' && 'text-green-400 line-through opacity-75')}>
-                        {item.name} × {item.qty}
-                      </span>
+                      <div className="flex-1">
+                        <span className={cn('block font-medium', item.status === 'ready' && 'text-green-400 line-through opacity-75')}>
+                          {item.name} × {item.qty}
+                        </span>
+                        {/* Chair Tagging */}
+                        <span className="inline-block text-[10px] font-bold text-accent/90 bg-accent/10 px-1.5 py-0.2 rounded mt-0.5">
+                          {item.seat_label || (item.seat_no ? `Chair ${item.seat_no}` : 'Table Common')}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2 text-xs">
@@ -257,13 +276,21 @@ export function LiveOrders() {
               <div className="flex gap-2">
                 <button
                   onClick={() => toggleRush(order.id)}
+                  disabled={order.status === 'awaiting_advance'}
                   className={cn(
                     'h-10 px-3 rounded-xl border text-xs font-bold transition-all btn-press flex items-center gap-1',
-                    order.is_rush ? 'border-red-500 bg-red-500/20 text-red-400' : 'border-line text-muted hover:text-ink'
+                    order.is_rush ? 'border-red-500 bg-red-500/20 text-red-400' : 'border-line text-muted hover:text-ink',
+                    order.status === 'awaiting_advance' && 'opacity-40 cursor-not-allowed'
                   )}
                 >
                   <Flame size={14} /> Rush
                 </button>
+
+                {order.status === 'awaiting_advance' && (
+                  <div className="flex-1 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-center gap-1">
+                    <span>Awaiting 20% Deposit (UPI) ⏳</span>
+                  </div>
+                )}
 
                 {order.status === 'new' && (
                   <button

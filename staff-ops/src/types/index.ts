@@ -1,12 +1,20 @@
 export type Role = 'kitchen' | 'waiter' | 'accountant';
 export type Theme = 'dark' | 'night' | 'light';
-export type OrderStatus = 'new' | 'preparing' | 'ready' | 'served' | 'completed' | 'cancelled' | 'void_requested' | 'voided';
+export type OrderStatus = 'new' | 'awaiting_advance' | 'preparing' | 'ready' | 'served' | 'completed' | 'cancelled' | 'void_requested' | 'voided';
 export type TableStatus = 'free' | 'occupied' | 'reserved' | 'cleaning';
 export type BillingStatus = 'open' | 'paid' | 'closed';
 export type RequestStatus = 'pending' | 'accepted' | 'done';
 export type LeaveType = 'casual' | 'sick' | 'paid' | 'unpaid';
 export type LeaveStatus = 'pending' | 'approved' | 'rejected';
 export type PaymentMethod = 'cash' | 'upi' | 'card' | 'split';
+
+export interface SeatInfo {
+  seat_no: number;
+  label?: string; // e.g. "Host (Chair 1)", "Guest of Host (Chair 2) [No Phone]"
+  is_direct_claim?: boolean; // Senior/Child with no phone claimed by primary user
+  claimed_by_seat?: number;
+  phone_active?: boolean;
+}
 
 export interface Staff {
   id: string;
@@ -48,6 +56,8 @@ export interface Table {
   zone: string;
   group_id: string | null;
   status: TableStatus;
+  linked_tables?: string[];
+  seats?: SeatInfo[];
 }
 
 export interface Session {
@@ -67,6 +77,7 @@ export interface OrderItem {
   qty: number;
   price: number;
   seat_no: number;
+  seat_label?: string; // "Host (Seat 1)", "Guest (Seat 2)", etc.
   spice_level?: number;
   addons?: string[];
   notes?: string;
@@ -90,6 +101,9 @@ export interface Order {
   is_parcel?: boolean;
   created_at: string;
   total: number;
+  advance_required?: number; // 20%
+  advance_paid?: boolean;
+  advance_txn_id?: string;
   waiter_id?: string;
 }
 
@@ -143,6 +157,19 @@ export interface Group {
   waiter_id: string;
 }
 
+export interface BillSeatShare {
+  seat: number;
+  label: string;
+  original_share: number;
+  adjusted_share: number; // dynamically rebalanced
+  rebalance_note?: string;
+  advance_credited: number;
+  pending_amount: number;
+  paid: boolean;
+  paid_method?: 'online_upi' | 'cash_counter' | 'card_pos' | null;
+  txn_id?: string;
+}
+
 export interface Bill {
   id: string;
   session_id: string;
@@ -150,13 +177,23 @@ export interface Bill {
   table_number: string;
   token: number;
   group_id: string | null;
+  linked_tables?: string[];
   subtotal: number;
   cgst: number;
   sgst: number;
   discount: number;
+  discount_amount?: number;
+  discount_percentage?: number;
+  discount_authorized_by?: string; // e.g. "Manager PIN 4812"
   total: number;
+  advance_deducted?: number;
+  paid_amount?: number;
+  balance_due?: number;
   status: 'pending' | 'paid' | 'void';
   method?: PaymentMethod;
+  counter_checkout_requested?: boolean;
+  counter_cash_lock?: boolean;
+  seats?: BillSeatShare[];
   receipt_code?: string;
   verify_code?: string;
   created_at: string;

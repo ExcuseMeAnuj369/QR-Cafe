@@ -82,6 +82,15 @@ function renderKitchenTab(el) {
   const readyOrders = STATE.kitchenOrders.filter(o => (o.status || '').toLowerCase() === 'ready');
 
   el.innerHTML = `
+    <!-- 20% Advance Gate Banner for Owner Oversight -->
+    <div class="mb-4 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2 text-amber-300 font-bold">
+        <span>🛡️ 20% Pre-Cooking Advance Gate Active</span>
+        <span class="text-gray-400 font-normal">| Prevents kitchen food wastage on unconfirmed customer carts</span>
+      </div>
+      <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold uppercase">Food Waste Shield</span>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <!-- Column: New Orders -->
       <div class="glass-card rounded-2xl p-4 flex flex-col">

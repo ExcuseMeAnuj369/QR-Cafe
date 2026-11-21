@@ -322,7 +322,12 @@ export function Requests() {
 
                   <div className="text-[11px] text-muted mb-3 flex items-center justify-between">
                     <span>Assigned: <strong className={isMine ? 'text-green-400' : 'text-gray-300'}>{assignedName}</strong></span>
-                    <span className="flex items-center gap-1"><Clock size={11} /> {formatElapsed(req.created_at)} ago</span>
+                    <span className={cn(
+                      'flex items-center gap-1 font-bold px-2 py-0.5 rounded',
+                      mins >= 3 ? 'text-red-400 bg-red-500/20 animate-pulse' : mins >= 2 ? 'text-amber-400 bg-amber-500/20' : 'text-green-400 bg-green-500/20'
+                    )}>
+                      <Clock size={11} /> {mins >= 3 ? `🚨 SLA Breach (+${mins - 3}m)` : `⏱ ${Math.max(0, 3 - mins)}m left`}
+                    </span>
                   </div>
 
                   <button

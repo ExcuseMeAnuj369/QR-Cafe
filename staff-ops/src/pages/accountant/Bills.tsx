@@ -43,8 +43,8 @@ export function Bills() {
   const handleApplyDiscount = (e: React.FormEvent) => {
     e.preventDefault();
     if (!bill) return;
-    if (discountPin !== '9999' && discountPin !== '1234') {
-      addToast('error', 'Invalid Manager PIN for discount');
+    if (discountPin !== '9999' && discountPin !== '1234' && discountPin !== '4812') {
+      addToast('error', 'Invalid Manager PIN for discount (Default 4812)');
       return;
     }
     if (discountPercent > 30) {
@@ -109,6 +109,11 @@ export function Bills() {
   const handleConfirmCollect = () => {
     if (!collectId || !bill) return;
 
+    if (bill.counter_cash_lock) {
+      addToast('error', '⚠️ Double-Payment Lock: A transaction is already in progress for this table.');
+      return;
+    }
+
     if (method === 'split') {
       const splitTotal = splitCash + splitUpi + splitCard;
       if (Math.abs(splitTotal - bill.total) > 1) {
@@ -118,6 +123,7 @@ export function Bills() {
     }
 
     payBill(collectId, method, phone || undefined);
+    addToast('success', `Settlement completed for ${bill.table_number}. Customer phone notified.`);
     setCollectId(null);
     setPhone('');
     setCashReceived('');
@@ -138,22 +144,54 @@ export function Bills() {
         <div className="space-y-3">
           {pending.map(b => (
             <div key={b.id} className="card p-4 flex flex-wrap items-center justify-between gap-4 border border-accent/20 bg-accent/5">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <span className="text-xl font-extrabold text-accent">{b.table_number}</span>
                   <span className="px-2 py-0.5 rounded-md bg-accent/15 text-accent text-xs font-bold">
                     TOKEN #{b.token}
                   </span>
                   {b.group_id && (
                     <span className="px-2 py-0.5 rounded-md bg-purple-500/20 text-purple-400 text-xs font-bold">
-                      Linked Table
+                      Group #{b.group_id} {b.linked_tables ? `(${b.linked_tables.join('+')})` : ''}
+                    </span>
+                  )}
+                  {b.counter_checkout_requested && (
+                    <span className="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-xs font-black animate-pulse border border-amber-500/40">
+                      🔔 Customer At Counter
                     </span>
                   )}
                 </div>
                 <p className="text-xs text-muted">
                   Subtotal {formatCurrency(b.subtotal)} · CGST {formatCurrency(b.cgst)} · SGST {formatCurrency(b.sgst)}
+                  {b.advance_deducted ? <span className="text-blue-400 ml-1">(-{formatCurrency(b.advance_deducted)} 20% Adv. Paid)</span> : null}
                   {b.discount > 0 && <span className="text-green-400 ml-1">(-{formatCurrency(b.discount)} disc)</span>}
                 </p>
+
+                {/* Seat Matrix & Rebalancing Breakdown */}
+                {b.seats && b.seats.length > 0 && (
+                  <div className="mt-2.5 space-y-1.5 p-2.5 rounded-xl bg-surface2/70 border border-line/60">
+                    <p className="text-[10px] font-bold text-muted uppercase tracking-wider">Seat & Split Matrix (Customer Synced):</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+                      {b.seats.map(s => (
+                        <div key={s.seat} className="p-2 rounded-lg bg-surface border border-line/50 text-[11px] flex flex-col justify-between">
+                          <div className="flex items-center justify-between font-bold">
+                            <span className="text-ink">{s.label}</span>
+                            <span className={cn('px-1.5 py-0.2 rounded text-[10px] font-black', s.paid ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-300')}>
+                              {s.paid ? `PAID (${s.paid_method || 'UPI'}) ✓` : `Pending: ${formatCurrency(s.pending_amount)}`}
+                            </span>
+                          </div>
+                          {s.rebalance_note && (
+                            <p className="text-[10px] text-accent/90 italic mt-0.5">{s.rebalance_note}</p>
+                          )}
+                          <div className="flex justify-between text-[10px] text-muted mt-1">
+                            <span>Share: {formatCurrency(s.adjusted_share || s.original_share)}</span>
+                            {s.advance_credited > 0 && <span>Adv. Credited: -{formatCurrency(s.advance_credited)}</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-3">
@@ -381,7 +419,7 @@ export function Bills() {
                   required
                   value={discountPin}
                   onChange={e => setDiscountPin(e.target.value)}
-                  placeholder="Enter 4-digit PIN (default 9999)"
+                  placeholder="Enter 4-digit PIN (default 4812)"
                   className="w-full h-11 px-3 rounded-xl bg-surface2 border border-line text-sm text-center font-mono focus:border-accent focus:outline-none"
                 />
               </div>
@@ -429,7 +467,7 @@ export function Bills() {
                   required
                   value={voidPin}
                   onChange={e => setVoidPin(e.target.value)}
-                  placeholder="Enter 4-digit PIN (default 9999)"
+                  placeholder="Enter 4-digit PIN (default 4812)"
                   className="w-full h-11 px-3 rounded-xl bg-surface2 border border-line text-sm text-center font-mono focus:border-accent focus:outline-none"
                 />
               </div>

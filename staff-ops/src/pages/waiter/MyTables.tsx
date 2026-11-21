@@ -135,14 +135,63 @@ export function MyTables() {
                     )}
                   </div>
 
-                  {group && (
-                    <div className="mb-3">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-xs font-bold">
-                        <Users size={12} />
-                        {group.group_code} · LINKED GROUP
+                  {/* Group Badging with Linked Tables */}
+                  {table.group_id && (
+                    <div className="mb-3 p-2 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-between text-xs">
+                      <span className="inline-flex items-center gap-1.5 font-bold text-purple-300">
+                        <Users size={14} />
+                        Group #{table.group_id}
+                        {table.linked_tables && table.linked_tables.length > 1 && (
+                          <span className="text-[11px] font-normal text-purple-200">
+                            (Merged: {table.linked_tables.join(' + ')})
+                          </span>
+                        )}
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded bg-purple-500/30 text-purple-200 text-[10px] font-extrabold uppercase">
+                        🔗 Linked
                       </span>
                     </div>
                   )}
+
+                  {/* 4 Interactive Chair Slots & Direct Guest Claims */}
+                  <div className="mb-3 p-2.5 rounded-xl bg-surface2/60 border border-line">
+                    <p className="text-[11px] font-bold text-muted uppercase tracking-wider mb-2 flex items-center justify-between">
+                      <span>Chairs & Occupants</span>
+                      <span className="text-accent text-[10px] lowercase">4 seats</span>
+                    </p>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {(table.seats || [
+                        { seat_no: 1, label: 'Chair 1: Host' },
+                        { seat_no: 2, label: 'Chair 2: Guest' },
+                        { seat_no: 3, label: 'Chair 3: Guest' },
+                        { seat_no: 4, label: 'Chair 4: Empty' }
+                      ]).map(s => (
+                        <div
+                          key={s.seat_no}
+                          className={cn(
+                            'p-1.5 rounded-lg border text-[11px] flex flex-col justify-between',
+                            s.is_direct_claim
+                              ? 'bg-amber-500/10 border-amber-500/40 text-amber-300'
+                              : s.phone_active
+                              ? 'bg-green-500/10 border-green-500/30 text-green-300'
+                              : 'bg-surface border-line/60 text-muted'
+                          )}
+                        >
+                          <div className="font-bold flex items-center gap-1">
+                            <span>🪑 Seat {s.seat_no}</span>
+                            {s.is_direct_claim && (
+                              <span className="px-1 rounded bg-amber-500/20 text-amber-400 text-[9px] font-black uppercase">
+                                No-Phone
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] truncate opacity-90">
+                            {s.is_direct_claim ? `Guest of Host (Chair ${s.claimed_by_seat || 1})` : s.label || 'Active Diner'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
                   {/* Active Orders List */}
                   {tableOrders.map(o => (
