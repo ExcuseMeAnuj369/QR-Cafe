@@ -1234,6 +1234,21 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Handle root-level /assets/ requests mapping to customer or staff dist
+  if (pathname.startsWith('/assets/')) {
+    const subAsset = pathname.replace('/assets/', '');
+    const custAsset = path.join(CUSTOMER_DIST_DIR, 'assets', subAsset);
+    const staffAsset = path.join(STAFF_DIST_DIR, 'assets', subAsset);
+    const targetAsset = fs.existsSync(custAsset) ? custAsset : (fs.existsSync(staffAsset) ? staffAsset : null);
+    if (targetAsset) {
+      const ext = path.extname(targetAsset).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': 'no-cache' });
+      fs.createReadStream(targetAsset).pipe(res);
+      return;
+    }
+  }
+
   // Staff Web App serving at /staff
   if (pathname.startsWith('/staff')) {
     let subPath = pathname.replace(/^\/staff\/?/, '');
