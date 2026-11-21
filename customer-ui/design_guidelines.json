@@ -1,0 +1,235 @@
+{
+  "theme": "dark",
+  "archetype": "THE PERFORMANCE PRO / AMOLED GLASS DINE",
+  "typography": {
+    "font_family_heading": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "font_family_body": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    "font_family_mono": "JetBrains Mono, monospace",
+    "weights": {
+      "heading": "700",
+      "subheading": "600",
+      "body": "400",
+      "price": "700"
+    },
+    "scale_px": {
+      "display": 48,
+      "h1": 36,
+      "h2": 28,
+      "h3": 20,
+      "body": 16,
+      "caption": 14
+    },
+    "rules": "All currency prices MUST use font-variant-numeric: tabular-nums (e.g. ₹280.00, ₹1,450.00) for zero jitter. Headings use tight tracking (-0.02em). Uppercase category badges use wide tracking (0.15em)."
+  },
+  "colors": {
+    "accent": "#F59E0B",
+    "on_accent": "#000000",
+    "accent_hover": "#D97706",
+    "accent_glow": "rgba(245, 158, 11, 0.35)",
+    "surfaces": [
+      {
+        "name": "page",
+        "kind": "solid",
+        "bg": "#090A0C",
+        "on_bg": "#F8FAFC",
+        "on_bg_muted": "#94A3B8"
+      },
+      {
+        "name": "panel",
+        "kind": "solid",
+        "bg": "#12151B",
+        "on_bg": "#F8FAFC",
+        "on_bg_muted": "#A1A1AA"
+      },
+      {
+        "name": "surface_elevated",
+        "kind": "solid",
+        "bg": "#1A1E26",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#CBD5E1"
+      },
+      {
+        "name": "inverse",
+        "kind": "solid",
+        "bg": "#F8FAFC",
+        "on_bg": "#090A0C",
+        "on_bg_muted": "#475569"
+      },
+      {
+        "name": "glass_header",
+        "kind": "glass",
+        "contrast_against": "#090A0C",
+        "guarantee": "backdrop-filter: blur(20px) saturate(160%); background: rgba(9, 10, 12, 0.82); border-bottom: 1px solid rgba(255, 255, 255, 0.08)",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#94A3B8",
+        "roles": {
+          "table_badge": "#F59E0B",
+          "link": "#38BDF8",
+          "error": "#F87171",
+          "success": "#4ADE80"
+        }
+      },
+      {
+        "name": "floating_cart_bar",
+        "kind": "glass",
+        "contrast_against": "#090A0C",
+        "guarantee": "backdrop-filter: blur(20px) saturate(180%); background: rgba(18, 21, 27, 0.92); border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 10px 30px -10px rgba(245, 158, 11, 0.3)",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#CBD5E1"
+      },
+      {
+        "name": "bottom_sheet_modal",
+        "kind": "glass",
+        "contrast_against": "#090A0C",
+        "guarantee": "backdrop-filter: blur(24px); background: rgba(14, 17, 23, 0.96); border-top: 1px solid rgba(255, 255, 255, 0.12)",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#94A3B8"
+      },
+      {
+        "name": "sold_out_card",
+        "kind": "solid",
+        "bg": "#121418",
+        "on_bg": "#71717A",
+        "on_bg_muted": "#52525B",
+        "roles": {
+          "stamp": "#EF4444"
+        }
+      },
+      {
+        "name": "badge_veg",
+        "kind": "solid",
+        "bg": "rgba(34, 197, 94, 0.12)",
+        "on_bg": "#22C55E",
+        "on_bg_muted": "#16A34A"
+      },
+      {
+        "name": "badge_nonveg",
+        "kind": "solid",
+        "bg": "rgba(239, 68, 68, 0.12)",
+        "on_bg": "#EF4444",
+        "on_bg_muted": "#DC2626"
+      }
+    ]
+  },
+  "entry_surfaces": {
+    "/": "AMOLED mobile-first ordering hub: frosted glass table header + language picker hero, live category pills, dense food item cards with live customization sheet, floating cart bar and waiter summon FAB",
+    "/track": "live order tracking portal: saffron animated glowing stepper (Placed → Kitchen → Ready), 3-min waiter SLA timer, live item list per seat",
+    "/bill": "digital receipt & bill split screen: GST breakdown (CGST 2.5% + SGST 2.5%), seat-wise or equal split tabs, 8-character verify code badge, UPI QR payment modal"
+  },
+  "layout_and_spacing": {
+    "viewport": "mobile-first phone frame (max-w-md mx-auto min-h-screen relative shadow-2xl bg-[#090A0C] text-[#F8FAFC])",
+    "touch_targets": "Minimum 44px by 44px for every tappable element (buttons, tabs, quantity pickers, category pills)",
+    "container_padding": "px-4 pt-16 pb-28",
+    "header_height": "h-16",
+    "floating_cart_bottom_spacing": "bottom-4 px-4",
+    "bento_grid": "Single column on mobile (grid-cols-1 gap-3.5), desktop preview frame styled like an elegant smartphone container or responsive tablet layout"
+  },
+  "motion_and_interactions": {
+    "button_press": "active:scale-[0.98] transition-transform duration-100 ease-out",
+    "add_to_cart_microinteraction": "Button tap scales down slightly to 0.98, triggers instant Sonner rich toast ('1x [Item Name] added to Cart')",
+    "stepper_glow": "Current status node pulses with Saffron shadow (box-shadow: 0 0 16px rgba(245, 158, 11, 0.75))",
+    "bottom_sheet": "Framer Motion slide-up spring transition (initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}) with backdrop blur background",
+    "confetti": "Lightweight canvas-confetti burst upon successful order placement with Saffron & Gold particles",
+    "skeleton_loading": "Tailwind animate-pulse shimmer skeletons matching exact card layout (rounded-2xl image rectangle, title bar, price bar)",
+    "tab_switching": "Smooth spring underline or pill shift on category change"
+  },
+  "key_features_ui_spec": {
+    "welcome_language_card": {
+      "description": "Initial floating glass card overlay: 'Welcome to Table T-04. Select your language / अपनी भाषा चुनें / आपली भाषा निवडा'. Options: English, हिन्दी, मराठी with one-click full UI translation.",
+      "testid": "language-selector-modal"
+    },
+    "table_header": {
+      "elements": "Table badge ('Table T-04' with live green connected dot), Search bar, Language toggle button, Active Orders quick button with badge",
+      "style": "Glassmorphism with backdrop-blur-xl border-b border-white/10 sticky top-0 z-40"
+    },
+    "category_pills": {
+      "categories": ["All", "Starters", "Mains", "Breads & Rice", "Drinks & Mocktails", "Desserts", "Chef Specials"],
+      "filters": ["Veg Only Toggle", "Non-Veg Only", "Spicy Filter", "Under ₹250"]
+    },
+    "menu_item_card": {
+      "elements": [
+        "Veg/Non-Veg icon (Green square with circle / Red triangle)",
+        "Food Image thumbnail with lazy shimmer load and high quality asset",
+        "Item Title, Description, Bestseller/Chef tag",
+        "Stock Warning Badge (e.g., 'Only 4 left!')",
+        "Tabular price (₹280.00)",
+        "Add / Quantity +/- button with 44px touch target",
+        "Sold-out state: desaturated card with rotated red 'SOLD OUT' stamp watermark and disabled controls"
+      ]
+    },
+    "customization_bottom_sheet": {
+      "elements": [
+        "Spice Level selector: Mild (🟢), Medium (🟡), Hot (🌶️), Extra Hot (🔥)",
+        "Add-ons checkboxes: Extra Cheese (+₹40), Butter Topping (+₹25), Extra Gravy (+₹50), Roasted Papad (+₹20)",
+        "Seat Assignment dropdown: Seat 1 to Seat 6 (so KOT prints 'Seat 2: ...')",
+        "Special cooking instructions textarea: 'e.g. No onion, less oil, pack separately'",
+        "Dynamic total CTA: 'Add to Order • ₹320.00'"
+      ],
+      "testid": "customization-sheet"
+    },
+    "floating_cart_bar": {
+      "elements": "Item count badge, Seat item avatars, Subtotal price, 'View Cart & Order →' button with saffron glow",
+      "behavior": "Visible when items > 0, sits fixed at bottom-4 with safe area padding"
+    },
+    "waiter_call_fab": {
+      "elements": "Floating Bell Icon FAB at bottom-right (above cart bar). Clicking opens Glass Modal with quick options: 'Water Bottle', 'Extra Napkins', 'Spoon & Fork', 'Clean Table', 'Call Captain'.",
+      "sla_timer": "Live 3-minute SLA countdown with anti-spam lock preventing re-call until timer completes or is acknowledged."
+    },
+    "order_tracking_stepper": {
+      "steps": [
+        {"id": 1, "title": "Order Placed", "time": "Just now", "desc": "Received by POS & KDS"},
+        {"id": 2, "title": "In Kitchen", "time": "~8 mins", "desc": "Chef is preparing your fresh order"},
+        {"id": 3, "title": "Ready to Serve", "time": "~3 mins", "desc": "Plating and garnishing"},
+        {"id": 4, "title": "Served on Table", "time": "Enjoy your meal", "desc": "Bon Appétit!"}
+      ]
+    },
+    "bill_and_split": {
+      "calculation": "Item Subtotal + CGST (2.5%) + SGST (2.5%) + Optional Service Tip (5%, 10%, Custom)",
+      "split_modes": [
+        {"mode": "equal", "label": "Split Equally", "desc": "Divide total across N diners"},
+        {"mode": "by_seat", "label": "Split by Seat / Individual", "desc": "Pay for Seat 1, Seat 2 items individually"}
+      ],
+      "verification": "Generated 8-character verification code (e.g. #QRD-7892) with QR payment modal (UPI / Card / Cash)"
+    }
+  },
+  "image_urls": [
+    {
+      "category": "starters_snacks",
+      "image_url": "https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBhcHBldGl6ZXJzJTIwc25hY2tzJTIwc2Ftb3NhJTIwa2ViYWJ8ZW58MHx8fHwxNzkwNDk0NTY2fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Crispy golden samosas with chutney and garnish for appetizers section"
+    },
+    {
+      "category": "biryani_main_course",
+      "image_url": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHwxfHxiaXJ5YW5pJTIwY3VycnklMjBuYWFuJTIwYm93bCUyMGZvb2R8ZW58MHx8fHwxNzk0NDA1NTM4fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Authentic fragrant Dum Biryani plate with raita and gravy"
+    },
+    {
+      "category": "handi_rice_special",
+      "image_url": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHw0fHxiaXJ5YW5pJTIwY3VycnklMjBuYWFuJTIwYm93bCUyMGZvb2R8ZW58MHx8fHwxNzk0NDA1NTM4fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Royal brass handi serving of aromatic spiced rice with saffron glaze"
+    },
+    {
+      "category": "tandoori_kebab_tray",
+      "image_url": "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBhcHBldGl6ZXJzJTIwc25hY2tzJTIwc2Ftb3NhJTIwa2ViYWJ8ZW58MHx8fHwxNzkwNDk0NTY2fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Sizzling platter with mint chutney and dips for chef specials"
+    }
+  ],
+  "accessibility_rules": {
+    "touch_area": "All interactive elements >= 44x44px bounding box",
+    "contrast": "All text tokens exceed WCAG AA 4.5:1 against dark backgrounds (#090A0C, #12151B, #1A1E26)",
+    "aria_roles": "Role dialog and sheet overlays have proper aria-modal, aria-labelledby, and keyboard focus trap",
+    "reduced_motion": "Wrap framer-motion variants in prefers-reduced-motion queries to support instant rendering",
+    "color_blindness": "Veg/Non-veg indicators use both geometric shapes (circle in square for Veg, triangle in square for Non-Veg) in addition to green/red colors"
+  },
+  "instructions_to_main_agent": [
+    "Template is farm-ts (FastAPI backend + Vite/React 19 frontend with Tailwind v4).",
+    "Use dark AMOLED black (#090A0C) as root background with Saffron (#F59E0B) primary accent.",
+    "Import @fontsource-variable/inter in frontend/src/index.css and set --font-sans to 'Inter Variable', sans-serif.",
+    "Render prices strictly formatted with Indian Rupee symbol '₹' and font-variant-numeric: tabular-nums.",
+    "Implement language dictionary state for EN (English), HI (हिन्दी), and MR (मराठी) with instant toggling.",
+    "Implement full mock and interactive state management: QR scan URL parameters (?table=T-04&session=sess_10293), cart per seat, waiter call SLA timer, active order tracking, split-bill calculator, and verification code generator.",
+    "Ensure every interactive element has a clear kebab-case data-testid attribute.",
+    "Use Sonner for toast notifications and ensure Toaster is placed bottom-right."
+  ]
+}
+

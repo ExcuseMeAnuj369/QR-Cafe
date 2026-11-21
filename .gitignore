@@ -1,7 +1,9 @@
 node_modules/
 staff-ops/node_modules/
+customer-ui/node_modules/
 .DS_Store
 *.log
 .env
+.env.*
 .env.local
 

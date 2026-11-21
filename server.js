@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = __dirname;
 const DB_FILE = path.join(__dirname, 'data', 'db.json');
 const STAFF_DIST_DIR = path.join(__dirname, 'staff-ops', 'dist');
+const CUSTOMER_DIST_DIR = path.join(__dirname, 'customer-ui', 'dist');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -1041,10 +1042,199 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ===================================================================
+  // 1.3 CUSTOMER APP COMPATIBILITY ENDPOINTS (/api/session, /api/order, /api/bill, /api/split-payment)
+  // ===================================================================
+  if (pathname === '/api/session/scan' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    const tableId = body.table_id || 'T-04';
+    const partySize = body.party_size && body.party_size > 0 ? body.party_size : 3;
+    const chairId = body.chair_id || 1;
+    const claimedChairs = body.claimed_chairs && body.claimed_chairs.length > 0
+      ? body.claimed_chairs
+      : (partySize > 1 ? Array.from({ length: partySize }, (_, i) => i + 1) : [chairId]);
+
+    const session = {
+      id: `ses-${tableId}-${Date.now().toString(36)}`,
+      code: `SES-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+      table_id: tableId,
+      group_id: 'GRP-8812',
+      linked_table_id: 'T-05',
+      party_size: claimedChairs.length,
+      is_host: chairId === 1,
+      host_seat: 1,
+      guest_seats: claimedChairs.filter(c => c !== chairId),
+      seats_count: claimedChairs.length,
+      chair_id: chairId,
+      claimed_chairs: claimedChairs,
+      group_code: '4812',
+      language: body.language || 'en',
+      status: 'active',
+      advance_paid: 0,
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 4 * 3600 * 1000).toISOString()
+    };
+
+    // Update table in db
+    db.tables = db.tables || [];
+    const table = db.tables.find(t => t.id === tableId || t.table_number === tableId);
+    if (table) {
+      table.status = 'occupied';
+      table.current_session_id = session.id;
+      table.group_id = 'GRP-8812';
+      table.linked_tables = ['T-04', 'T-05'];
+    }
+
+    db.sessions = db.sessions || [];
+    db.sessions.push(session);
+    writeDb(db);
+    return sendJson(res, 200, session);
+  }
+
+  if (pathname.startsWith('/api/session/') && req.method === 'GET') {
+    const sessId = pathname.replace('/api/session/', '');
+    const db = readDb();
+    const sess = (db.sessions || []).find(s => s.id === sessId) || {
+      id: sessId,
+      code: 'SES-DEMO',
+      table_id: 'T-04',
+      group_id: 'GRP-8812',
+      linked_table_id: 'T-05',
+      party_size: 3,
+      is_host: true,
+      host_seat: 1,
+      guest_seats: [2, 3],
+      seats_count: 3,
+      chair_id: 1,
+      claimed_chairs: [1, 2, 3],
+      group_code: '4812',
+      language: 'en',
+      status: 'active',
+      advance_paid: 0,
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 4 * 3600 * 1000).toISOString()
+    };
+    return sendJson(res, 200, sess);
+  }
+
+  if (pathname === '/api/order' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    db.orders = db.orders || [];
+
+    const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
+    const advanceRequired = body.advance_required || Math.round((body.subtotal || 400) * 0.2);
+
+    const newOrder = {
+      id: orderId,
+      kot_number: `KOT-${(db.orders.length + 1).toString().padStart(2, '0')}`,
+      session_id: body.session_id || 'ses-t4',
+      table_id: body.table_id || 'T-04',
+      table_number: body.table_id || 'T-04',
+      token: Math.floor(10 + Math.random() * 80),
+      group_id: body.group_id || 'GRP-8812',
+      status: 'awaiting_advance', // Gate cooking until 20% advance
+      is_rush: false,
+      items: (body.items || []).map((it, idx) => ({
+        id: `oi-${Date.now()}-${idx}`,
+        menu_id: it.item_id || 'm1',
+        name: typeof it.name === 'object' ? it.name.en : (it.name || 'Delicious Dish'),
+        qty: it.qty || 1,
+        price: it.price || 200,
+        seat_no: it.seat || 1,
+        seat_label: it.seat === 1 ? 'Seat 1 (Host)' : `Seat ${it.seat || 1} (Guest - No Phone)`,
+        spice_level: it.spice === 'hot' ? 3 : 1,
+        status: 'awaiting_advance',
+        station: 'Grill'
+      })),
+      total: body.subtotal || 400,
+      advance_required: advanceRequired,
+      advance_paid: false,
+      created_at: new Date().toISOString()
+    };
+
+    db.orders.unshift(newOrder);
+    writeDb(db);
+    return sendJson(res, 201, newOrder);
+  }
+
+  if (pathname.startsWith('/api/bill/') && req.method === 'GET') {
+    const sessId = pathname.replace('/api/bill/', '');
+    const db = readDb();
+    const existing = (db.bills || []).find(b => b.session_id === sessId || b.id === sessId);
+    if (existing) {
+      return sendJson(res, 200, existing);
+    }
+    const sampleBill = (db.bills || [])[0] || {};
+    return sendJson(res, 200, sampleBill);
+  }
+
+  if (pathname === '/api/split-payment' && req.method === 'POST') {
+    const body = await parseJsonBody(req);
+    const db = readDb();
+    db.bills = db.bills || [];
+    const targetBill = db.bills.find(b => b.session_id === body.session_id) || db.bills[0];
+
+    if (targetBill) {
+      const payAmount = Number(body.amount) || 100;
+      targetBill.paid_amount = (targetBill.paid_amount || 0) + payAmount;
+      targetBill.balance_due = Math.max(0, (targetBill.balance_due || targetBill.total) - payAmount);
+      if (targetBill.balance_due === 0) {
+        targetBill.status = 'paid';
+      }
+      if (targetBill.seats && body.seat) {
+        const s = targetBill.seats.find(x => x.seat === body.seat);
+        if (s) {
+          s.paid = true;
+          s.pending_amount = 0;
+          s.paid_method = 'online_upi';
+        }
+      }
+    }
+
+    writeDb(db);
+    return sendJson(res, 200, {
+      payment: { id: `pay-${Date.now()}`, mode: body.mode, amount: body.amount },
+      bill: targetBill,
+      complete: targetBill?.status === 'paid'
+    });
+  }
+
+  // ===================================================================
   // 2. STATIC FILE SERVING
   // ===================================================================
 
 
+  // Customer Web App serving at /customer
+  if (pathname.startsWith('/customer')) {
+    let subPath = pathname.replace(/^\/customer\/?/, '');
+    if (!subPath || subPath === '') subPath = 'index.html';
+    const filePath = path.join(CUSTOMER_DIST_DIR, subPath);
+
+    fs.stat(filePath, (err, stats) => {
+      if (err || !stats.isFile()) {
+        const fallbackPath = path.join(CUSTOMER_DIST_DIR, 'index.html');
+        fs.readFile(fallbackPath, (fbErr, content) => {
+          if (fbErr) {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Customer App Not Found.');
+          } else {
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(content);
+          }
+        });
+        return;
+      }
+
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': 'no-cache' });
+      fs.createReadStream(filePath).pipe(res);
+    });
+    return;
+  }
+
+  // Staff Web App serving at /staff
   if (pathname.startsWith('/staff')) {
     let subPath = pathname.replace(/^\/staff\/?/, '');
     if (!subPath || subPath === '') subPath = 'index.html';
