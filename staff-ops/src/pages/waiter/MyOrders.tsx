@@ -237,12 +237,23 @@ export function MyOrders() {
 
               {/* Action Buttons */}
               <div className="flex gap-2">
+                {/* 1. Customer placed order (Advance Paid): Waiter pushes to Kitchen */}
+                {(order.status === 'new' || (order as any).status === 'awaiting_advance') && (
+                  <button
+                    onClick={() => updateOrderStatus(order.id, 'preparing')}
+                    className="flex-1 h-11 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm btn-press flex items-center justify-center gap-2 shadow-lg"
+                  >
+                    <span>🍳 Push to Kitchen KOT →</span>
+                  </button>
+                )}
+
+                {/* 2. Kitchen marked ready: Waiter picks up and delivers */}
                 {isReady && (
                   <button
                     onClick={() => updateOrderStatus(order.id, 'served')}
-                    className="flex-1 h-11 rounded-xl bg-green-500 text-black font-extrabold text-sm btn-press flex items-center justify-center gap-2"
+                    className="flex-1 h-11 rounded-xl bg-green-500 hover:bg-green-400 text-black font-extrabold text-sm btn-press flex items-center justify-center gap-2 shadow-lg"
                   >
-                    <CheckCircle2 size={18} /> Pick Up & Serve
+                    <CheckCircle2 size={18} /> Pick Up & Serve ✓
                   </button>
                 )}
 

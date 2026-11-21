@@ -5,11 +5,10 @@ import { Search, Flame, CheckCircle2, Clock, Users, Zap, CheckCheck } from 'luci
 import type { OrderStatus } from '../../types';
 
 const statusFilters: { id: OrderStatus | 'all'; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'awaiting_advance', label: '⏳ Awaiting 20% Advance' },
-  { id: 'new', label: 'New' },
-  { id: 'preparing', label: 'Preparing' },
-  { id: 'ready', label: 'Ready' },
+  { id: 'all', label: 'All Orders' },
+  { id: 'new', label: 'New Dispatched' },
+  { id: 'preparing', label: 'Cooking / Preparing' },
+  { id: 'ready', label: 'Ready for Pickup' },
   { id: 'served', label: 'Served' },
 ];
 
@@ -24,6 +23,7 @@ export function LiveOrders() {
   const [reason, setReason] = useState('spoiled-ingredient');
 
   const filtered = orders
+    .filter(o => o.status !== 'awaiting_advance') // Kitchen only cooks dispatched orders; waiter pushes orders to kitchen
     .filter(o => filter === 'all' || o.status === filter)
     .filter(o => {
       if (selectedStation === 'All') return true;
@@ -276,28 +276,20 @@ export function LiveOrders() {
               <div className="flex gap-2">
                 <button
                   onClick={() => toggleRush(order.id)}
-                  disabled={order.status === 'awaiting_advance'}
                   className={cn(
                     'h-10 px-3 rounded-xl border text-xs font-bold transition-all btn-press flex items-center gap-1',
-                    order.is_rush ? 'border-red-500 bg-red-500/20 text-red-400' : 'border-line text-muted hover:text-ink',
-                    order.status === 'awaiting_advance' && 'opacity-40 cursor-not-allowed'
+                    order.is_rush ? 'border-red-500 bg-red-500/20 text-red-400' : 'border-line text-muted hover:text-ink'
                   )}
                 >
                   <Flame size={14} /> Rush
                 </button>
-
-                {order.status === 'awaiting_advance' && (
-                  <div className="flex-1 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-center gap-1">
-                    <span>Awaiting 20% Deposit (UPI) ⏳</span>
-                  </div>
-                )}
 
                 {order.status === 'new' && (
                   <button
                     onClick={() => updateOrderStatus(order.id, 'preparing')}
                     className="flex-1 h-10 rounded-xl bg-accent text-black text-sm font-bold btn-press"
                   >
-                    Start Preparing →
+                    Start Cooking →
                   </button>
                 )}
 
